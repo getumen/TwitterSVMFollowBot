@@ -52,7 +52,7 @@ class StreamListener(tweepy.streaming.StreamListener):
 
     def on_status(self, status):
         self.cur.execute("INSERT INTO tweet VALUES (?,?,?,?,?,?)", self._parse_status(status))
-        self.cur.executemany("INSERT INTO word VALUES (?)", self._parse_text(status.text))
+        #self.cur.executemany("INSERT INTO word VALUES (?)", self._parse_text(status.text))
 
         self.count += 1
         if self.count % 100 == 0:
