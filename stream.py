@@ -51,12 +51,13 @@ class StreamListener(tweepy.streaming.StreamListener):
         return [(w[0],) for w in words if w[1] and w[1].split(',')[0] == '名詞']
 
     def on_status(self, status):
+        if status.lang != 'ja':
+            return True
         self.cur.execute("REPLACE INTO user VALUES (?,?,?,?,?,?)", self._parse_status(status))
         # self.cur.executemany("INSERT INTO word VALUES (?)", self._parse_text(status.text))
         self.count += 1
         if self.count % 100 == 0:
             self.conn.commit()
-            print(self.count)
         if self.count % 1000 == 0:
             raise MyExeption
         return True
@@ -162,7 +163,7 @@ class ML(object):
             score_list = sorted(score_list, key=lambda e: e[1], reversed=True)
             follow_list = [e[0] for e in score_list[:num]]
         else:
-            self.cur.execute('select user_id from user limit ?', (num,))
+            self.cur.execute('select user_id from user ORDER BY RANDOM() limit ?', (num,))
             follow_list = [r[0] for r in self.cur.fetchall()]
         for follow_id in follow_list:
             self.api.create_friendship(follow_id)
