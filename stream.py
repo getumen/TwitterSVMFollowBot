@@ -6,8 +6,11 @@ import os
 import env
 import sqlite3
 import MeCab
+import time
+
 
 class MyExeption(BaseException): pass
+
 
 class StreamListener(tweepy.streaming.StreamListener):
 
@@ -27,11 +30,9 @@ class StreamListener(tweepy.streaming.StreamListener):
         self.mecab = MeCab.Tagger()
         self.count = 1
 
-
     def __del__(self):
-        self.c1.close()
-        self.conn1.close()
-
+        self.cur.close()
+        self.conn.close()
 
     def _parse_status(self, status):
         user = status.author
@@ -41,18 +42,16 @@ class StreamListener(tweepy.streaming.StreamListener):
         favourites_count = user.favourites_count
         statuses_count = user.statuses_count
         user_id = user.id
-        return (statuses_count, followers_count, friends_count, protected, favourites_count, user_id)
-
+        return statuses_count, followers_count, friends_count, protected, favourites_count, user_id
 
     def _parse_text(self, text):
         parsed = self.mecab.parse(text)
         words = [w for w in [w.split('\t') for w in parsed.split('\n')] if len(w)>=2]
         return [(w[0],) for w in words if w[1] and w[1].split(',')[0] == '名詞' ]
 
-
     def on_status(self, status):
         self.cur.execute("INSERT INTO tweet VALUES (?,?,?,?,?,?)", self._parse_status(status))
-        #self.cur.executemany("INSERT INTO word VALUES (?)", self._parse_text(status.text))
+        # self.cur.executemany("INSERT INTO word VALUES (?)", self._parse_text(status.text))
         print(status.text.strip())
         self.count += 1
         if self.count % 100 == 0:
@@ -60,7 +59,7 @@ class StreamListener(tweepy.streaming.StreamListener):
             self.count = 0
         return True
 
-    def on_error(self,status):
+    def on_error(self, status_code):
         if status_code == 420:
             time.sleep(60*9)
             raise MyExeption
