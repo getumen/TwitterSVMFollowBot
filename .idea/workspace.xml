@@ -26,36 +26,38 @@
       <file leaf-file-name="stream.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/stream.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="310">
-              <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+            <state relative-caret-position="400">
+              <caret line="59" column="28" selection-start-line="59" selection-start-column="28" selection-end-line="59" selection-end-column="28" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
-                <marker date="1479720866719" expanded="true" signature="438:699" ph="CREATE TABLE... tweet" />
-                <marker date="1479720866719" expanded="true" signature="440:697" ph="CREATE TABLE... tweet" />
-                <marker date="1479720866719" expanded="true" signature="728:771" ph="CREATE TABLE... word" />
-                <marker date="1479720866719" expanded="true" signature="728:773" ph="CREATE TABLE... IF" />
-                <marker date="1479720866719" expanded="true" signature="1647:1685" ph="REPLACE INTO... tweet" />
-                <marker date="1479720866719" expanded="true" signature="1654:1685" ph="INSERT INTO tweet... " />
-                <marker date="1479720866719" expanded="true" signature="2827:2892" ph="CREATE TABLE... IF" />
-                <marker date="1479720866719" expanded="true" signature="2925:2989" ph="CREATE TABLE... IF" />
-                <marker date="1479720866719" expanded="true" signature="3022:3145" ph="CREATE TABLE... IF" />
-                <marker date="1479720866719" expanded="true" signature="3400:3420" ph="DELETE FROM " />
-                <marker date="1479720866719" expanded="true" signature="3480:3511" ph="INSERT INTO followed... " />
-                <marker date="1479720866719" expanded="true" signature="3627:3648" ph="DELETE FROM " />
-                <marker date="1479720866719" expanded="true" signature="3708:3740" ph="INSERT INTO following... " />
-                <marker date="1479720866719" expanded="true" signature="3830:3901" ph="update data " />
-                <marker date="1479720866719" expanded="true" signature="3872:3900" ph="SELECT user_... followed" />
-                <marker date="1479720866719" expanded="true" signature="3959:4044" ph="select follo... following" />
-                <marker date="1479720866719" expanded="true" signature="3959:4082" ph="select follo... following" />
-                <marker date="1479720866719" expanded="true" signature="3959:6851" ph="select follo... following" />
-                <marker date="1479720866719" expanded="true" signature="4053:4081" ph="SELECT user_... followed" />
-                <marker date="1479720866719" expanded="true" signature="4370:4412" ph="update data " />
-                <marker date="1479720866719" expanded="true" signature="4541:4630" ph="select user_... followed" />
-                <marker date="1479720866719" expanded="true" signature="4600:4629" ph="SELECT user_... following" />
-                <marker date="1479720866719" expanded="true" signature="4867:5025" ph="select label... data" />
-                <marker date="1479720866719" expanded="true" signature="5225:5386" ph="select statu... user" />
-                <marker date="1479720866719" expanded="true" signature="5357:5385" ph="SELECT user_... followed" />
-                <marker date="1479720866719" expanded="true" signature="6004:6036" ph="replace into... data" />
+                <marker date="1479721323153" expanded="true" signature="438:699" ph="CREATE TABLE... tweet" />
+                <marker date="1479721323153" expanded="true" signature="440:697" ph="CREATE TABLE... tweet" />
+                <marker date="1479721323153" expanded="true" signature="728:771" ph="CREATE TABLE... word" />
+                <marker date="1479721323153" expanded="true" signature="728:773" ph="CREATE TABLE... IF" />
+                <marker date="1479721323153" expanded="true" signature="1648:1686" ph="REPLACE INTO... tweet" />
+                <marker date="1479721323153" expanded="true" signature="1655:1686" ph="INSERT INTO tweet... " />
+                <marker date="1479721323153" expanded="true" signature="2827:2892" ph="CREATE TABLE... IF" />
+                <marker date="1479721323153" expanded="true" signature="2925:2989" ph="CREATE TABLE... IF" />
+                <marker date="1479721323153" expanded="true" signature="3022:3145" ph="CREATE TABLE... IF" />
+                <marker date="1479721323153" expanded="true" signature="3400:3420" ph="DELETE FROM " />
+                <marker date="1479721323153" expanded="true" signature="3480:3511" ph="INSERT INTO followed... " />
+                <marker date="1479721323153" expanded="true" signature="3627:3648" ph="DELETE FROM " />
+                <marker date="1479721323153" expanded="true" signature="3708:3740" ph="INSERT INTO following... " />
+                <marker date="1479721323153" expanded="true" signature="3830:3901" ph="update data " />
+                <marker date="1479721323153" expanded="true" signature="3872:3900" ph="SELECT user_... followed" />
+                <marker date="1479721323153" expanded="true" signature="3959:4044" ph="select follo... following" />
+                <marker date="1479721323153" expanded="true" signature="3959:4082" ph="select follo... following" />
+                <marker date="1479721323153" expanded="true" signature="3959:6910" ph="select follo... following" />
+                <marker date="1479721323153" expanded="true" signature="4053:4081" ph="SELECT user_... followed" />
+                <marker date="1479721323153" expanded="true" signature="4370:4412" ph="update data " />
+                <marker date="1479721323153" expanded="true" signature="4541:4630" ph="select user_... followed" />
+                <marker date="1479721323153" expanded="true" signature="4600:4629" ph="SELECT user_... following" />
+                <marker date="1479721323153" expanded="true" signature="4867:5025" ph="select label... data" />
+                <marker date="1479721323153" expanded="true" signature="5225:5386" ph="select statu... user" />
+                <marker date="1479721323153" expanded="true" signature="5225:5445" ph="select user_... user" />
+                <marker date="1479721323153" expanded="true" signature="5357:5385" ph="SELECT user_... followed" />
+                <marker date="1479721323153" expanded="true" signature="5415:5444" ph="SELECT user_... following" />
+                <marker date="1479721323153" expanded="true" signature="6063:6095" ph="replace into... data" />
               </folding>
             </state>
           </provider>
@@ -76,8 +78,8 @@
       <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="36">
-              <caret line="2" column="6" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
+            <state relative-caret-position="18">
+              <caret line="1" column="12" selection-start-line="1" selection-start-column="12" selection-end-line="1" selection-end-column="12" />
               <folding />
             </state>
           </provider>
@@ -110,8 +112,8 @@
       <list>
         <option value="$PROJECT_DIR$/bot.py" />
         <option value="$PROJECT_DIR$/requirements.txt" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/env.py" />
+        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/stream.py" />
       </list>
     </option>
@@ -481,32 +483,34 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
-            <marker date="1479720866719" expanded="true" signature="438:699" ph="CREATE TABLE... tweet" />
-            <marker date="1479720866719" expanded="true" signature="440:697" ph="CREATE TABLE... tweet" />
-            <marker date="1479720866719" expanded="true" signature="728:771" ph="CREATE TABLE... word" />
-            <marker date="1479720866719" expanded="true" signature="728:773" ph="CREATE TABLE... IF" />
-            <marker date="1479720866719" expanded="true" signature="1647:1685" ph="REPLACE INTO... tweet" />
-            <marker date="1479720866719" expanded="true" signature="1654:1685" ph="INSERT INTO tweet... " />
-            <marker date="1479720866719" expanded="true" signature="2827:2892" ph="CREATE TABLE... IF" />
-            <marker date="1479720866719" expanded="true" signature="2925:2989" ph="CREATE TABLE... IF" />
-            <marker date="1479720866719" expanded="true" signature="3022:3145" ph="CREATE TABLE... IF" />
-            <marker date="1479720866719" expanded="true" signature="3400:3420" ph="DELETE FROM " />
-            <marker date="1479720866719" expanded="true" signature="3480:3511" ph="INSERT INTO followed... " />
-            <marker date="1479720866719" expanded="true" signature="3627:3648" ph="DELETE FROM " />
-            <marker date="1479720866719" expanded="true" signature="3708:3740" ph="INSERT INTO following... " />
-            <marker date="1479720866719" expanded="true" signature="3830:3901" ph="update data " />
-            <marker date="1479720866719" expanded="true" signature="3872:3900" ph="SELECT user_... followed" />
-            <marker date="1479720866719" expanded="true" signature="3959:4044" ph="select follo... following" />
-            <marker date="1479720866719" expanded="true" signature="3959:4082" ph="select follo... following" />
-            <marker date="1479720866719" expanded="true" signature="3959:6851" ph="select follo... following" />
-            <marker date="1479720866719" expanded="true" signature="4053:4081" ph="SELECT user_... followed" />
-            <marker date="1479720866719" expanded="true" signature="4370:4412" ph="update data " />
-            <marker date="1479720866719" expanded="true" signature="4541:4630" ph="select user_... followed" />
-            <marker date="1479720866719" expanded="true" signature="4600:4629" ph="SELECT user_... following" />
-            <marker date="1479720866719" expanded="true" signature="4867:5025" ph="select label... data" />
-            <marker date="1479720866719" expanded="true" signature="5225:5386" ph="select statu... user" />
-            <marker date="1479720866719" expanded="true" signature="5357:5385" ph="SELECT user_... followed" />
-            <marker date="1479720866719" expanded="true" signature="6004:6036" ph="replace into... data" />
+            <marker date="1479721323153" expanded="true" signature="438:699" ph="CREATE TABLE... tweet" />
+            <marker date="1479721323153" expanded="true" signature="440:697" ph="CREATE TABLE... tweet" />
+            <marker date="1479721323153" expanded="true" signature="728:771" ph="CREATE TABLE... word" />
+            <marker date="1479721323153" expanded="true" signature="728:773" ph="CREATE TABLE... IF" />
+            <marker date="1479721323153" expanded="true" signature="1648:1686" ph="REPLACE INTO... tweet" />
+            <marker date="1479721323153" expanded="true" signature="1655:1686" ph="INSERT INTO tweet... " />
+            <marker date="1479721323153" expanded="true" signature="2827:2892" ph="CREATE TABLE... IF" />
+            <marker date="1479721323153" expanded="true" signature="2925:2989" ph="CREATE TABLE... IF" />
+            <marker date="1479721323153" expanded="true" signature="3022:3145" ph="CREATE TABLE... IF" />
+            <marker date="1479721323153" expanded="true" signature="3400:3420" ph="DELETE FROM " />
+            <marker date="1479721323153" expanded="true" signature="3480:3511" ph="INSERT INTO followed... " />
+            <marker date="1479721323153" expanded="true" signature="3627:3648" ph="DELETE FROM " />
+            <marker date="1479721323153" expanded="true" signature="3708:3740" ph="INSERT INTO following... " />
+            <marker date="1479721323153" expanded="true" signature="3830:3901" ph="update data " />
+            <marker date="1479721323153" expanded="true" signature="3872:3900" ph="SELECT user_... followed" />
+            <marker date="1479721323153" expanded="true" signature="3959:4044" ph="select follo... following" />
+            <marker date="1479721323153" expanded="true" signature="3959:4082" ph="select follo... following" />
+            <marker date="1479721323153" expanded="true" signature="3959:6910" ph="select follo... following" />
+            <marker date="1479721323153" expanded="true" signature="4053:4081" ph="SELECT user_... followed" />
+            <marker date="1479721323153" expanded="true" signature="4370:4412" ph="update data " />
+            <marker date="1479721323153" expanded="true" signature="4541:4630" ph="select user_... followed" />
+            <marker date="1479721323153" expanded="true" signature="4600:4629" ph="SELECT user_... following" />
+            <marker date="1479721323153" expanded="true" signature="4867:5025" ph="select label... data" />
+            <marker date="1479721323153" expanded="true" signature="5225:5386" ph="select statu... user" />
+            <marker date="1479721323153" expanded="true" signature="5225:5445" ph="select user_... user" />
+            <marker date="1479721323153" expanded="true" signature="5357:5385" ph="SELECT user_... followed" />
+            <marker date="1479721323153" expanded="true" signature="5415:5444" ph="SELECT user_... following" />
+            <marker date="1479721323153" expanded="true" signature="6063:6095" ph="replace into... data" />
           </folding>
         </state>
       </provider>
@@ -536,14 +540,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" column="6" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/env.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
@@ -554,38 +550,48 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="1" column="12" selection-start-line="1" selection-start-column="12" selection-end-line="1" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/stream.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="310">
-          <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+        <state relative-caret-position="400">
+          <caret line="59" column="28" selection-start-line="59" selection-start-column="28" selection-end-line="59" selection-end-column="28" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
-            <marker date="1479720866719" expanded="true" signature="438:699" ph="CREATE TABLE... tweet" />
-            <marker date="1479720866719" expanded="true" signature="440:697" ph="CREATE TABLE... tweet" />
-            <marker date="1479720866719" expanded="true" signature="728:771" ph="CREATE TABLE... word" />
-            <marker date="1479720866719" expanded="true" signature="728:773" ph="CREATE TABLE... IF" />
-            <marker date="1479720866719" expanded="true" signature="1647:1685" ph="REPLACE INTO... tweet" />
-            <marker date="1479720866719" expanded="true" signature="1654:1685" ph="INSERT INTO tweet... " />
-            <marker date="1479720866719" expanded="true" signature="2827:2892" ph="CREATE TABLE... IF" />
-            <marker date="1479720866719" expanded="true" signature="2925:2989" ph="CREATE TABLE... IF" />
-            <marker date="1479720866719" expanded="true" signature="3022:3145" ph="CREATE TABLE... IF" />
-            <marker date="1479720866719" expanded="true" signature="3400:3420" ph="DELETE FROM " />
-            <marker date="1479720866719" expanded="true" signature="3480:3511" ph="INSERT INTO followed... " />
-            <marker date="1479720866719" expanded="true" signature="3627:3648" ph="DELETE FROM " />
-            <marker date="1479720866719" expanded="true" signature="3708:3740" ph="INSERT INTO following... " />
-            <marker date="1479720866719" expanded="true" signature="3830:3901" ph="update data " />
-            <marker date="1479720866719" expanded="true" signature="3872:3900" ph="SELECT user_... followed" />
-            <marker date="1479720866719" expanded="true" signature="3959:4044" ph="select follo... following" />
-            <marker date="1479720866719" expanded="true" signature="3959:4082" ph="select follo... following" />
-            <marker date="1479720866719" expanded="true" signature="3959:6851" ph="select follo... following" />
-            <marker date="1479720866719" expanded="true" signature="4053:4081" ph="SELECT user_... followed" />
-            <marker date="1479720866719" expanded="true" signature="4370:4412" ph="update data " />
-            <marker date="1479720866719" expanded="true" signature="4541:4630" ph="select user_... followed" />
-            <marker date="1479720866719" expanded="true" signature="4600:4629" ph="SELECT user_... following" />
-            <marker date="1479720866719" expanded="true" signature="4867:5025" ph="select label... data" />
-            <marker date="1479720866719" expanded="true" signature="5225:5386" ph="select statu... user" />
-            <marker date="1479720866719" expanded="true" signature="5357:5385" ph="SELECT user_... followed" />
-            <marker date="1479720866719" expanded="true" signature="6004:6036" ph="replace into... data" />
+            <marker date="1479721323153" expanded="true" signature="438:699" ph="CREATE TABLE... tweet" />
+            <marker date="1479721323153" expanded="true" signature="440:697" ph="CREATE TABLE... tweet" />
+            <marker date="1479721323153" expanded="true" signature="728:771" ph="CREATE TABLE... word" />
+            <marker date="1479721323153" expanded="true" signature="728:773" ph="CREATE TABLE... IF" />
+            <marker date="1479721323153" expanded="true" signature="1648:1686" ph="REPLACE INTO... tweet" />
+            <marker date="1479721323153" expanded="true" signature="1655:1686" ph="INSERT INTO tweet... " />
+            <marker date="1479721323153" expanded="true" signature="2827:2892" ph="CREATE TABLE... IF" />
+            <marker date="1479721323153" expanded="true" signature="2925:2989" ph="CREATE TABLE... IF" />
+            <marker date="1479721323153" expanded="true" signature="3022:3145" ph="CREATE TABLE... IF" />
+            <marker date="1479721323153" expanded="true" signature="3400:3420" ph="DELETE FROM " />
+            <marker date="1479721323153" expanded="true" signature="3480:3511" ph="INSERT INTO followed... " />
+            <marker date="1479721323153" expanded="true" signature="3627:3648" ph="DELETE FROM " />
+            <marker date="1479721323153" expanded="true" signature="3708:3740" ph="INSERT INTO following... " />
+            <marker date="1479721323153" expanded="true" signature="3830:3901" ph="update data " />
+            <marker date="1479721323153" expanded="true" signature="3872:3900" ph="SELECT user_... followed" />
+            <marker date="1479721323153" expanded="true" signature="3959:4044" ph="select follo... following" />
+            <marker date="1479721323153" expanded="true" signature="3959:4082" ph="select follo... following" />
+            <marker date="1479721323153" expanded="true" signature="3959:6910" ph="select follo... following" />
+            <marker date="1479721323153" expanded="true" signature="4053:4081" ph="SELECT user_... followed" />
+            <marker date="1479721323153" expanded="true" signature="4370:4412" ph="update data " />
+            <marker date="1479721323153" expanded="true" signature="4541:4630" ph="select user_... followed" />
+            <marker date="1479721323153" expanded="true" signature="4600:4629" ph="SELECT user_... following" />
+            <marker date="1479721323153" expanded="true" signature="4867:5025" ph="select label... data" />
+            <marker date="1479721323153" expanded="true" signature="5225:5386" ph="select statu... user" />
+            <marker date="1479721323153" expanded="true" signature="5225:5445" ph="select user_... user" />
+            <marker date="1479721323153" expanded="true" signature="5357:5385" ph="SELECT user_... followed" />
+            <marker date="1479721323153" expanded="true" signature="5415:5444" ph="SELECT user_... following" />
+            <marker date="1479721323153" expanded="true" signature="6063:6095" ph="replace into... data" />
           </folding>
         </state>
       </provider>

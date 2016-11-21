@@ -47,8 +47,8 @@ class StreamListener(tweepy.streaming.StreamListener):
 
     def _parse_text(self, text):
         parsed = self.mecab.parse(text)
-        words = [w for w in [w.split('\t') for w in parsed.split('\n')] if len(w)>=2]
-        return [(w[0],) for w in words if w[1] and w[1].split(',')[0] == '名詞' ]
+        words = [w for w in [w.split('\t') for w in parsed.split('\n')] if len(w) >= 2]
+        return [(w[0],) for w in words if w[1] and w[1].split(',')[0] == '名詞']
 
     def on_status(self, status):
         self.cur.execute("REPLACE INTO user VALUES (?,?,?,?,?,?)", self._parse_status(status))
@@ -57,7 +57,7 @@ class StreamListener(tweepy.streaming.StreamListener):
         if self.count % 100 == 0:
             self.conn.commit()
             print(self.count)
-        if self.count % 10000 == 0:
+        if self.count % 1000 == 0:
             raise MyExeption
         return True
 
@@ -144,7 +144,8 @@ class ML(object):
         clf = svm.SVC(probability=True)
         clf.fit(X, y)
         self.cur.execute('''select user_id, statuses_count, followers_count, friends_count, protected, favourites_count
-        from user WHERE user_id not in (SELECT user_id FROM followed)''')
+        from user WHERE user_id not in (SELECT user_id FROM followed)
+        and user_id not in (SELECT user_id FROM following)''')
         X = np.array(self.cur.fetchall())
         score_list = []
         y_predict = clf.predict(X[:, 1:])
