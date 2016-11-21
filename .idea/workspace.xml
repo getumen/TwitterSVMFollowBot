@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f7289aeb-8117-4fef-a8b3-77676942ffdf" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/env.py" afterPath="$PROJECT_DIR$/env.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/requirements.txt" afterPath="$PROJECT_DIR$/requirements.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/stream.py" afterPath="$PROJECT_DIR$/stream.py" />
     </list>
@@ -24,18 +24,52 @@
     <favorites_list name="tweepy" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="stream.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/stream.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="594">
-              <caret line="89" column="24" selection-start-line="89" selection-start-column="24" selection-end-line="89" selection-end-column="24" />
+            <state relative-caret-position="3294">
+              <caret line="183" column="26" selection-start-line="183" selection-start-column="26" selection-end-line="183" selection-end-column="26" />
               <folding>
-                <element signature="e#0#10#0" expanded="true" />
-                <marker date="1479706994751" expanded="true" signature="459:708" ph="CREATE TABLE... tweet" />
-                <marker date="1479706994751" expanded="true" signature="461:706" ph="CREATE TABLE... tweet" />
-                <marker date="1479706994751" expanded="true" signature="739:795" ph="CREATE TABLE... word" />
-                <marker date="1479706994751" expanded="true" signature="1646:1684" ph="INSERT INTO tweet... " />
+                <element signature="e#0#13#0" expanded="true" />
+                <marker date="1479720387043" expanded="true" signature="438:699" ph="CREATE TABLE... tweet" />
+                <marker date="1479720387043" expanded="true" signature="440:697" ph="CREATE TABLE... tweet" />
+                <marker date="1479720387043" expanded="true" signature="728:771" ph="CREATE TABLE... word" />
+                <marker date="1479720387043" expanded="true" signature="728:773" ph="CREATE TABLE... IF" />
+                <marker date="1479720387043" expanded="true" signature="1648:1687" ph="REPLACE INTO... tweet" />
+                <marker date="1479720387043" expanded="true" signature="1655:1687" ph="INSERT INTO tweet... " />
+                <marker date="1479720387043" expanded="true" signature="2799:2864" ph="CREATE TABLE... IF" />
+                <marker date="1479720387043" expanded="true" signature="2897:2961" ph="CREATE TABLE... IF" />
+                <marker date="1479720387043" expanded="true" signature="2994:3117" ph="CREATE TABLE... IF" />
+                <marker date="1479720387043" expanded="true" signature="3372:3392" ph="DELETE FROM " />
+                <marker date="1479720387043" expanded="true" signature="3452:3483" ph="INSERT INTO followed... " />
+                <marker date="1479720387043" expanded="true" signature="3599:3620" ph="DELETE FROM " />
+                <marker date="1479720387043" expanded="true" signature="3680:3712" ph="INSERT INTO following... " />
+                <marker date="1479720387043" expanded="true" signature="3802:3873" ph="update data " />
+                <marker date="1479720387043" expanded="true" signature="3844:3872" ph="SELECT user_... followed" />
+                <marker date="1479720387043" expanded="true" signature="3931:4016" ph="select follo... following" />
+                <marker date="1479720387043" expanded="true" signature="3931:4054" ph="select follo... following" />
+                <marker date="1479720387043" expanded="true" signature="3931:6789" ph="select follo... following" />
+                <marker date="1479720387043" expanded="true" signature="4025:4053" ph="SELECT user_... followed" />
+                <marker date="1479720387043" expanded="true" signature="4342:4384" ph="update data " />
+                <marker date="1479720387043" expanded="true" signature="4513:4602" ph="select user_... followed" />
+                <marker date="1479720387043" expanded="true" signature="4572:4601" ph="SELECT user_... following" />
+                <marker date="1479720387043" expanded="true" signature="4839:4997" ph="select label... data" />
+                <marker date="1479720387043" expanded="true" signature="5197:5358" ph="select statu... user" />
+                <marker date="1479720387043" expanded="true" signature="5329:5357" ph="SELECT user_... followed" />
+                <marker date="1479720387043" expanded="true" signature="5976:6008" ph="replace into... data" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="env.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/env.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="234">
+              <caret line="13" column="6" selection-start-line="13" selection-start-column="6" selection-end-line="13" selection-end-column="6" />
+              <folding>
+                <element signature="e#0#15#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -54,8 +88,8 @@
       <file leaf-file-name="requirements.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/requirements.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="54">
-              <caret line="3" column="11" selection-start-line="3" selection-start-column="11" selection-end-line="3" selection-end-column="11" />
+            <state relative-caret-position="108">
+              <caret line="6" column="5" selection-start-line="6" selection-start-column="5" selection-end-line="6" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -78,6 +112,7 @@
       <list>
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/bot.py" />
+        <option value="$PROJECT_DIR$/env.py" />
         <option value="$PROJECT_DIR$/requirements.txt" />
         <option value="$PROJECT_DIR$/stream.py" />
       </list>
@@ -90,8 +125,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="57" />
-    <option name="y" value="21" />
+    <option name="x" value="1423" />
+    <option name="y" value="-747" />
     <option name="width" value="1309" />
     <option name="height" value="747" />
   </component>
@@ -167,8 +202,8 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -263,6 +298,12 @@
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <envs />
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.npm" factoryName="npm">
@@ -397,25 +438,25 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="57" y="21" width="1309" height="747" extended-state="6" />
+    <frame x="1423" y="-747" width="1309" height="747" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24980901" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32988167" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
@@ -436,18 +477,46 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/stream.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <marker date="1479720387043" expanded="true" signature="438:699" ph="CREATE TABLE... tweet" />
+            <marker date="1479720387043" expanded="true" signature="440:697" ph="CREATE TABLE... tweet" />
+            <marker date="1479720387043" expanded="true" signature="728:771" ph="CREATE TABLE... word" />
+            <marker date="1479720387043" expanded="true" signature="728:773" ph="CREATE TABLE... IF" />
+            <marker date="1479720387043" expanded="true" signature="1648:1687" ph="REPLACE INTO... tweet" />
+            <marker date="1479720387043" expanded="true" signature="1655:1687" ph="INSERT INTO tweet... " />
+            <marker date="1479720387043" expanded="true" signature="2799:2864" ph="CREATE TABLE... IF" />
+            <marker date="1479720387043" expanded="true" signature="2897:2961" ph="CREATE TABLE... IF" />
+            <marker date="1479720387043" expanded="true" signature="2994:3117" ph="CREATE TABLE... IF" />
+            <marker date="1479720387043" expanded="true" signature="3372:3392" ph="DELETE FROM " />
+            <marker date="1479720387043" expanded="true" signature="3452:3483" ph="INSERT INTO followed... " />
+            <marker date="1479720387043" expanded="true" signature="3599:3620" ph="DELETE FROM " />
+            <marker date="1479720387043" expanded="true" signature="3680:3712" ph="INSERT INTO following... " />
+            <marker date="1479720387043" expanded="true" signature="3802:3873" ph="update data " />
+            <marker date="1479720387043" expanded="true" signature="3844:3872" ph="SELECT user_... followed" />
+            <marker date="1479720387043" expanded="true" signature="3931:4016" ph="select follo... following" />
+            <marker date="1479720387043" expanded="true" signature="3931:4054" ph="select follo... following" />
+            <marker date="1479720387043" expanded="true" signature="3931:6789" ph="select follo... following" />
+            <marker date="1479720387043" expanded="true" signature="4025:4053" ph="SELECT user_... followed" />
+            <marker date="1479720387043" expanded="true" signature="4342:4384" ph="update data " />
+            <marker date="1479720387043" expanded="true" signature="4513:4602" ph="select user_... followed" />
+            <marker date="1479720387043" expanded="true" signature="4572:4601" ph="SELECT user_... following" />
+            <marker date="1479720387043" expanded="true" signature="4839:4997" ph="select label... data" />
+            <marker date="1479720387043" expanded="true" signature="5197:5358" ph="select statu... user" />
+            <marker date="1479720387043" expanded="true" signature="5329:5357" ph="SELECT user_... followed" />
+            <marker date="1479720387043" expanded="true" signature="5976:6008" ph="replace into... data" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="36">
           <caret line="2" column="5" selection-start-line="2" selection-start-column="5" selection-end-line="2" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bot.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -460,16 +529,65 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="5" selection-start-line="2" selection-start-column="5" selection-end-line="2" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bot.py" />
+    <entry file="file://$PROJECT_DIR$/env.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="13" column="6" selection-start-line="13" selection-start-column="6" selection-end-line="13" selection-end-column="6" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/requirements.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="5" selection-start-line="6" selection-start-column="5" selection-end-line="6" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/stream.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="594">
-          <caret line="89" column="24" selection-start-line="89" selection-start-column="24" selection-end-line="89" selection-end-column="24" />
+        <state relative-caret-position="3294">
+          <caret line="183" column="26" selection-start-line="183" selection-start-column="26" selection-end-line="183" selection-end-column="26" />
           <folding>
-            <element signature="e#0#10#0" expanded="true" />
-            <marker date="1479706994751" expanded="true" signature="459:708" ph="CREATE TABLE... tweet" />
-            <marker date="1479706994751" expanded="true" signature="461:706" ph="CREATE TABLE... tweet" />
-            <marker date="1479706994751" expanded="true" signature="739:795" ph="CREATE TABLE... word" />
-            <marker date="1479706994751" expanded="true" signature="1646:1684" ph="INSERT INTO tweet... " />
+            <element signature="e#0#13#0" expanded="true" />
+            <marker date="1479720387043" expanded="true" signature="438:699" ph="CREATE TABLE... tweet" />
+            <marker date="1479720387043" expanded="true" signature="440:697" ph="CREATE TABLE... tweet" />
+            <marker date="1479720387043" expanded="true" signature="728:771" ph="CREATE TABLE... word" />
+            <marker date="1479720387043" expanded="true" signature="728:773" ph="CREATE TABLE... IF" />
+            <marker date="1479720387043" expanded="true" signature="1648:1687" ph="REPLACE INTO... tweet" />
+            <marker date="1479720387043" expanded="true" signature="1655:1687" ph="INSERT INTO tweet... " />
+            <marker date="1479720387043" expanded="true" signature="2799:2864" ph="CREATE TABLE... IF" />
+            <marker date="1479720387043" expanded="true" signature="2897:2961" ph="CREATE TABLE... IF" />
+            <marker date="1479720387043" expanded="true" signature="2994:3117" ph="CREATE TABLE... IF" />
+            <marker date="1479720387043" expanded="true" signature="3372:3392" ph="DELETE FROM " />
+            <marker date="1479720387043" expanded="true" signature="3452:3483" ph="INSERT INTO followed... " />
+            <marker date="1479720387043" expanded="true" signature="3599:3620" ph="DELETE FROM " />
+            <marker date="1479720387043" expanded="true" signature="3680:3712" ph="INSERT INTO following... " />
+            <marker date="1479720387043" expanded="true" signature="3802:3873" ph="update data " />
+            <marker date="1479720387043" expanded="true" signature="3844:3872" ph="SELECT user_... followed" />
+            <marker date="1479720387043" expanded="true" signature="3931:4016" ph="select follo... following" />
+            <marker date="1479720387043" expanded="true" signature="3931:4054" ph="select follo... following" />
+            <marker date="1479720387043" expanded="true" signature="3931:6789" ph="select follo... following" />
+            <marker date="1479720387043" expanded="true" signature="4025:4053" ph="SELECT user_... followed" />
+            <marker date="1479720387043" expanded="true" signature="4342:4384" ph="update data " />
+            <marker date="1479720387043" expanded="true" signature="4513:4602" ph="select user_... followed" />
+            <marker date="1479720387043" expanded="true" signature="4572:4601" ph="SELECT user_... following" />
+            <marker date="1479720387043" expanded="true" signature="4839:4997" ph="select label... data" />
+            <marker date="1479720387043" expanded="true" signature="5197:5358" ph="select statu... user" />
+            <marker date="1479720387043" expanded="true" signature="5329:5357" ph="SELECT user_... followed" />
+            <marker date="1479720387043" expanded="true" signature="5976:6008" ph="replace into... data" />
           </folding>
         </state>
       </provider>

@@ -2,3 +2,6 @@ tweepy
 requests
 mecab-python3
 apscheduler
+sklearn
+numpy
+scipy
