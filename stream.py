@@ -147,16 +147,27 @@ class ML(object):
         Z = np.array(self.cur.fetchall())
         follow_list = []
         if len(Z.shape) == 2:
-            y = Z[:, 0]
-            X = stats.zscore(Z[:, 1:], axis=0)
-            clf = svm.SVC(probability=True)
-            clf.fit(X, y)
+            y_train = Z[:, 0]
+            X_train = Z[:, 1:]
             self.cur.execute('''select user_id, statuses_count, followers_count, friends_count, protected, favourites_count
-            from user WHERE user_id not in (SELECT user_id FROM followed)
-            and user_id not in (SELECT user_id FROM following)''')
-            X = np.array(self.cur.fetchall())
+                        from user WHERE user_id not in (SELECT user_id FROM followed)
+                        and user_id not in (SELECT user_id FROM following)''')
+            user_data = np.array(self.cur.fetchall())
+            X_predict = user_data[:, 1:]
+            n_train, p = X_train.shape
+            n_predict, _ = X_predict.shape
+            X = np.zeros((n_train+n_predict, p))
+            X[:n_train, :] = X_train
+            X[n_train:, :] = X_predict
+            X = stats.zscore(X.copy(), axis=0)
+            X_train = X[:n_train, :]
+            X_predict = X[n_train:, :]
+
+            clf = svm.SVC(probability=True)
+            clf.fit(X_train, y_train)
+
             score_list = []
-            y_predict = clf.predict(X[:, 1:])
+            y_predict = clf.predict(X_predict[:, 1:])
             y_score = clf.decision_function(X[:, 1:]) * y_predict
             for i in range(len(y_score)):
                 score_list.append((X[i, 0], y_score[i]))
