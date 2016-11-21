@@ -7,6 +7,7 @@ import env
 import sqlite3
 import MeCab
 import time
+import apscheduler.scheduler
 
 
 class MyExeption(BaseException): pass
@@ -52,7 +53,6 @@ class StreamListener(tweepy.streaming.StreamListener):
     def on_status(self, status):
         self.cur.execute("INSERT INTO tweet VALUES (?,?,?,?,?,?)", self._parse_status(status))
         # self.cur.executemany("INSERT INTO word VALUES (?)", self._parse_text(status.text))
-        print(status.text.strip())
         self.count += 1
         if self.count % 100 == 0:
             self.conn.commit()
@@ -74,16 +74,18 @@ def get_oauth():
     consumer_secret = os.environ['TWITTER_CONSUMER_SECRET']
     access_key = os.environ['TWITTER_ACCESS_KEY']
     access_secret = os.environ['TWITTER_ACCESS_SECRET']
-    auth = OAuthHandler(consumer_key, consumer_secret)
-    auth.set_access_token(access_key, access_secret)
-    return auth
+    _auth = OAuthHandler(consumer_key, consumer_secret)
+    _auth.set_access_token(access_key, access_secret)
+    return _auth
+
 
 if __name__ == '__main__':
     auth = get_oauth()
-    stream = tweepy.Stream(auth,StreamListener())
-    while True :
+    stream = tweepy.Stream(auth, StreamListener())
+    while True:
         try:
             stream.filter(track=env.TWEET_FILTER_WORDS)
         except MyExeption:
             time.sleep(60)
+            print('error')
             stream = tweepy.Stream(auth, StreamListener())
