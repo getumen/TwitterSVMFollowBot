@@ -58,7 +58,7 @@ class StreamListener(tweepy.streaming.StreamListener):
         self.count += 1
         if self.count % 100 == 0:
             self.conn.commit()
-        if self.count % 1000 == 0:
+        if self.count % 10000 == 0:
             raise MyExeption
         return True
 
