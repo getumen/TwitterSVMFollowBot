@@ -31,7 +31,6 @@ class StreamListener(tweepy.streaming.StreamListener):
         self.count = 1
         self.conn.commit()
 
-
     def __del__(self):
         self.cur.close()
         self.conn.close()
@@ -57,6 +56,7 @@ class StreamListener(tweepy.streaming.StreamListener):
         self.count += 1
         if self.count % 100 == 0:
             self.conn.commit()
+            print(self.count)
         if self.count % 10000 == 0:
             raise MyExeption
         return True
