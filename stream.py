@@ -167,7 +167,7 @@ class ML(object):
         friend = self.api.me().friends_count()
         followed = self.api.me().followers_count()
         can_follow = max(5000, int(followed*1.1)) - friend
-        follow_num = min(can_follow, 5-count if 5-count >= 0 else 0)
+        follow_num = min(can_follow, env.FOLLOW_AT_ONCE-count if env.FOLLOW_AT_ONCE-count >= 0 else 0)
         self.follow(follow_num)
 
 

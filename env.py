@@ -13,3 +13,5 @@ TWEET_FILTER_WORDS = [k for k in key_words if len(k)>0]
 
 # days
 PENDING_TIME = 1
+
+FOLLOW_AT_ONCE = 5
