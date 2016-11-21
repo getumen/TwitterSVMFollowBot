@@ -52,7 +52,7 @@ class StreamListener(tweepy.streaming.StreamListener):
         return [(w[0],) for w in words if w[1] and w[1].split(',')[0] == '名詞' ]
 
     def on_status(self, status):
-        self.cur.execute("REPLACE INTO tweet VALUES (?,?,?,?,?,?)", self._parse_status(status))
+        self.cur.execute("REPLACE INTO user VALUES (?,?,?,?,?,?)", self._parse_status(status))
         # self.cur.executemany("INSERT INTO word VALUES (?)", self._parse_text(status.text))
         self.count += 1
         if self.count % 100 == 0:
