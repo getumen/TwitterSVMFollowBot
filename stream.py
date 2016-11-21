@@ -163,7 +163,10 @@ class ML(object):
             score_list = sorted(score_list, key=lambda e: e[1], reversed=True)
             follow_list = [e[0] for e in score_list[:num]]
         else:
-            self.cur.execute('select user_id from user ORDER BY RANDOM() limit ?', (num,))
+            self.cur.execute(
+                '''select user_id from user
+                WHERE user_id not in (SELECT user_id FROM followed)
+                and user_id not in (SELECT user_id FROM following) ORDER BY RANDOM() limit ?''', (num,))
             follow_list = [r[0] for r in self.cur.fetchall()]
         for follow_id in follow_list:
             self.api.create_friendship(follow_id)
