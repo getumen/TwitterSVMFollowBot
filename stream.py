@@ -93,7 +93,7 @@ class ML(object):
         self.cur.execute('''CREATE TABLE IF NOT EXISTS data(
         user_id INTEGER PRIMARY KEY,
         label INTEGER,
-        ts timestamp
+        ts datetime
         )''')
         self.conn.commit()
 
@@ -117,12 +117,17 @@ class ML(object):
         self.conn.commit()
         self.cur.execute('''select following.user_id from following,data
         where ts<? AND following.user_id NOT IN (SELECT user_id FROM followed)''',
-                         datetime.datetime.now()-datetime.timedelta(days=env.PENDING_TIME))
+                         (datetime.datetime.now()-datetime.timedelta(days=env.PENDING_TIME),))
         remove_list = self.cur.fetchall()
         for remove_id in remove_list:
             self.api.destroy_friendship(id=remove_id[0])
             time.sleep(1)
-        self.cur.execute('''update data set label=0 WHERE user_id IN ?''', [e[0] for e in remove_id])
+        self.cur.execute(
+            '''update data set label=0 WHERE user_id IN
+            (select following.user_id from following,data
+            where ts<? AND following.user_id NOT IN (SELECT user_id FROM followed))''',
+            (datetime.datetime.now() - datetime.timedelta(days=env.PENDING_TIME),)
+        )
         self.conn.commit()
 
     def follow_back(self):
@@ -139,21 +144,26 @@ class ML(object):
         self.cur.execute('''select label, statuses_count, followers_count, friends_count, protected, favourites_count
         from data, user where user.user_id=data.user_id AND label>=0''')
         Z = np.array(self.cur.fetchall())
-        y = Z[:, 0]
-        X = stats.zscore(Z[:, 1:], axis=0)
-        clf = svm.SVC(probability=True)
-        clf.fit(X, y)
-        self.cur.execute('''select user_id, statuses_count, followers_count, friends_count, protected, favourites_count
-        from user WHERE user_id not in (SELECT user_id FROM followed)
-        and user_id not in (SELECT user_id FROM following)''')
-        X = np.array(self.cur.fetchall())
-        score_list = []
-        y_predict = clf.predict(X[:, 1:])
-        y_score = clf.decision_function(X[:, 1:]) * y_predict
-        for i in range(len(y_score)):
-            score_list.append((X[i, 0], y_score[i]))
-        score_list = sorted(score_list, key=lambda e: e[1], reversed=True)
-        follow_list = [e[0] for e in score_list[:num]]
+        follow_list = []
+        if len(Z.shape) == 2:
+            y = Z[:, 0]
+            X = stats.zscore(Z[:, 1:], axis=0)
+            clf = svm.SVC(probability=True)
+            clf.fit(X, y)
+            self.cur.execute('''select user_id, statuses_count, followers_count, friends_count, protected, favourites_count
+            from user WHERE user_id not in (SELECT user_id FROM followed)
+            and user_id not in (SELECT user_id FROM following)''')
+            X = np.array(self.cur.fetchall())
+            score_list = []
+            y_predict = clf.predict(X[:, 1:])
+            y_score = clf.decision_function(X[:, 1:]) * y_predict
+            for i in range(len(y_score)):
+                score_list.append((X[i, 0], y_score[i]))
+            score_list = sorted(score_list, key=lambda e: e[1], reversed=True)
+            follow_list = [e[0] for e in score_list[:num]]
+        else:
+            self.cur.execute('select user_id from user limit ?', (num,))
+            follow_list = [r[0] for r in self.cur.fetchall()]
         for follow_id in follow_list:
             self.api.create_friendship(follow_id)
             time.sleep(1)
@@ -165,8 +175,9 @@ class ML(object):
         self.update_relation()
         self.update_label()
         count = self.follow_back()
-        friend = self.api.me().friends_count()
-        followed = self.api.me().followers_count()
+        me = self.api.me()
+        friend = me.friends_count
+        followed = me.followers_count
         can_follow = max(5000, int(followed*1.1)) - friend
         follow_num = min(can_follow, env.FOLLOW_AT_ONCE-count if env.FOLLOW_AT_ONCE-count >= 0 else 0)
         self.follow(follow_num)
