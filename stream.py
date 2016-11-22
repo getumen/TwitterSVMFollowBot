@@ -59,7 +59,7 @@ class StreamListener(tweepy.streaming.StreamListener):
         print(self.count, status.text.rstrip())
         if self.count % 100 == 0:
             self.conn.commit()
-        if self.count % 100 == 0:
+        if self.count % env.FOLLOW_PER_TWEET == 0:
             raise MyExeption
         return True
 
@@ -103,6 +103,15 @@ class ML(object):
         self.cur.close()
         self.conn.close()
 
+    def follow_user(self, follow_id):
+        try:
+            self.api.create_friendship(id=int(follow_id))
+        except tweepy.error.TweepError as e:
+            if e['code'] == 162:
+                pass
+            else:
+                raise e
+
     def update_relation(self):
         my_id = self.api.me().id
         followed_list = self.api.followers_ids(id=my_id)
@@ -142,7 +151,7 @@ class ML(object):
         (SELECT user_id FROM following)''')
         count = 0
         for follow_id in follow_list:
-            self.api.create_friendship(follow_id)
+            self.follow_user(follow_id)
             time.sleep(1)
             count += 1
         return count
@@ -153,11 +162,12 @@ class ML(object):
         Z = np.array(self.cur.fetchall(), dtype=np.float64)
         follow_list = []
         if len(Z.shape) == 2 and np.any(Z[:, 0] == 0) and np.any(Z[:, 0] == 1):
-            y_train = np.nan_to_num(Z[:, 0])
+            y_train = np.nan_to_num(Z[:, 0]).astype(int)
             X_train = np.nan_to_num(Z[:, 1:])
             self.cur.execute('''select user_id, statuses_count, followers_count, friends_count, protected, favourites_count
                         from user WHERE user_id not in (SELECT user_id FROM followed)
-                        and user_id not in (SELECT user_id FROM following)''')
+                        and user_id not in (SELECT user_id FROM following)
+                        and user_id not in (SELECT user_id FROM data)''')
             user_data = np.array(self.cur.fetchall(), dtype=np.float64)
             X_predict = np.nan_to_num(user_data[:, 1:])
             n_train, p = X_train.shape
@@ -174,10 +184,13 @@ class ML(object):
 
             score_list = []
             y_predict = clf.predict(X_predict)
-            y_score = clf.decision_function(X_predict) * y_predict
+            y_score = np.absolute(clf.decision_function(X_predict))
+            y_score[y_predict == 0] = -y_score[y_predict == 0]
+            v= y_score
             for i in range(len(y_score)):
-                score_list.append((user_data[i, 0], y_score[i]))
-            score_list = sorted(score_list, key=lambda e: e[1], reversed=True)
+                score_list.append((user_data[i, 0], v[i]))
+            score_list = sorted(score_list, key=lambda e: e[1], reverse=True)
+            print(score_list[:num])
             follow_list = [e[0] for e in score_list[:num]]
         else:
             self.cur.execute(
@@ -186,7 +199,7 @@ class ML(object):
                 and user_id not in (SELECT user_id FROM following) ORDER BY RANDOM() limit ?''', (num,))
             follow_list = [r[0] for r in self.cur.fetchall()]
         for follow_id in follow_list:
-            self.api.create_friendship(follow_id)
+            self.follow_user(follow_id)
             time.sleep(1)
         param = [(uid, -1, datetime.datetime.now()) for uid in follow_list]
         self.cur.executemany('''replace into data VALUES (?,?,?)''', param)
