@@ -116,6 +116,10 @@ class ML(object):
 
     def update_label(self):
         self.cur.execute(
+            '''update data set label=0 where label=-1 AND user_id not in (select user_id from following)'''
+        )
+        self.conn.commit()
+        self.cur.execute(
             '''insert or ignore into data select user_id, -1, ?
             from following where user_id not in (select user_id from data)''', (datetime.datetime.now(),))
         self.cur.execute('update data set label=1 WHERE user_id IN (SELECT user_id FROM followed)')
