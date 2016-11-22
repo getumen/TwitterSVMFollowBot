@@ -56,6 +56,7 @@ class StreamListener(tweepy.streaming.StreamListener):
         self.cur.execute("REPLACE INTO user VALUES (?,?,?,?,?,?)", self._parse_status(status))
         # self.cur.executemany("INSERT INTO word VALUES (?)", self._parse_text(status.text))
         self.count += 1
+        print(self.count, status.text)
         if self.count % 100 == 0:
             self.conn.commit()
         if self.count % 10000 == 0:
