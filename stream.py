@@ -20,11 +20,11 @@ class StreamListener(tweepy.streaming.StreamListener):
         self.conn = sqlite3.connect('tweet.db')
         self.cur = self.conn.cursor()
         self.cur.execute('''CREATE TABLE IF NOT EXISTS user
-             (followers_count integer,
-             friends_count integer,
+             (followers_count integer DEFAULT 0,
+             friends_count integer DEFAULT 0,
              protected boolean,
-             favourites_count integer,
-             statuses_count integer,
+             favourites_count integer DEFAULT 0,
+             statuses_count integer DEFAULT 0,
              user_id integer PRIMARY KEY )''')
         self.cur.execute('CREATE TABLE IF NOT EXISTS word (word text)')
         self.mecab = MeCab.Tagger()
@@ -153,13 +153,13 @@ class ML(object):
         Z = np.array(self.cur.fetchall(), dtype=np.float64)
         follow_list = []
         if len(Z.shape) == 2:
-            y_train = Z[:, 0]
-            X_train = Z[:, 1:]
+            y_train = np.nan_to_num(Z[:, 0])
+            X_train = np.nan_to_num(Z[:, 1:])
             self.cur.execute('''select user_id, statuses_count, followers_count, friends_count, protected, favourites_count
                         from user WHERE user_id not in (SELECT user_id FROM followed)
                         and user_id not in (SELECT user_id FROM following)''')
             user_data = np.array(self.cur.fetchall(), dtype=np.float64)
-            X_predict = user_data[:, 1:]
+            X_predict = np.nan_to_num(user_data[:, 1:])
             n_train, p = X_train.shape
             n_predict, _ = X_predict.shape
             X = np.zeros((n_train+n_predict, p))
