@@ -20,11 +20,11 @@ class StreamListener(tweepy.streaming.StreamListener):
         self.conn = sqlite3.connect('tweet.db')
         self.cur = self.conn.cursor()
         self.cur.execute('''CREATE TABLE IF NOT EXISTS user
-             (followers_count integer DEFAULT 0,
-             friends_count integer DEFAULT 0,
-             protected boolean,
+             (statuses_count integer DEFAULT 0,
+             followers_count integer DEFAULT 0,
+             friends_count integer,
+             protected boolean DEFAULT 0,
              favourites_count integer DEFAULT 0,
-             statuses_count integer DEFAULT 0,
              user_id integer PRIMARY KEY )''')
         self.cur.execute('CREATE TABLE IF NOT EXISTS word (word text)')
         self.mecab = MeCab.Tagger()
