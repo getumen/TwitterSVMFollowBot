@@ -152,7 +152,7 @@ class ML(object):
         from data, user where user.user_id=data.user_id AND label>=0''')
         Z = np.array(self.cur.fetchall(), dtype=np.float64)
         follow_list = []
-        if len(Z.shape) == 2 and Z.shape[0] > 100:
+        if len(Z.shape) == 2 and np.any(Z[:, 0] == 0) and np.any(Z[:, 0] == 1):
             y_train = np.nan_to_num(Z[:, 0])
             X_train = np.nan_to_num(Z[:, 1:])
             self.cur.execute('''select user_id, statuses_count, followers_count, friends_count, protected, favourites_count
