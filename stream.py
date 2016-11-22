@@ -114,10 +114,14 @@ class ML(object):
         self.cur.executemany('INSERT INTO following VALUES (?)', [(e,) for e in following_list])
 
     def update_label(self):
+        self.cur.execute(
+            '''insert or ignore into data select user_id, -1, ?
+            from following where user_id not in (select user_id from data)''', (datetime.datetime.now(),))
         self.cur.execute('update data set label=1 WHERE user_id IN (SELECT user_id FROM followed)')
         self.conn.commit()
         self.cur.execute('''select following.user_id from following,data
-        where ts<? AND following.user_id NOT IN (SELECT user_id FROM followed)''',
+        where following.user_id = data.user_id AND ts<?
+        AND following.user_id NOT IN (SELECT user_id FROM followed)''',
                          (datetime.datetime.now()-datetime.timedelta(days=env.PENDING_TIME),))
         remove_list = self.cur.fetchall()
         for remove_id in remove_list:
@@ -126,7 +130,8 @@ class ML(object):
         self.cur.execute(
             '''update data set label=0 WHERE user_id IN
             (select following.user_id from following,data
-            where ts<? AND following.user_id NOT IN (SELECT user_id FROM followed))''',
+            where following.user_id = data.user_id AND ts<?
+            AND following.user_id NOT IN (SELECT user_id FROM followed))''',
             (datetime.datetime.now() - datetime.timedelta(days=env.PENDING_TIME),)
         )
         self.conn.commit()
@@ -144,7 +149,7 @@ class ML(object):
     def follow(self, num):
         self.cur.execute('''select label, statuses_count, followers_count, friends_count, protected, favourites_count
         from data, user where user.user_id=data.user_id AND label>=0''')
-        Z = np.array(self.cur.fetchall())
+        Z = np.array(self.cur.fetchall(), dtype=np.float64)
         follow_list = []
         if len(Z.shape) == 2:
             y_train = Z[:, 0]
@@ -152,7 +157,7 @@ class ML(object):
             self.cur.execute('''select user_id, statuses_count, followers_count, friends_count, protected, favourites_count
                         from user WHERE user_id not in (SELECT user_id FROM followed)
                         and user_id not in (SELECT user_id FROM following)''')
-            user_data = np.array(self.cur.fetchall())
+            user_data = np.array(self.cur.fetchall(), dtype=np.float64)
             X_predict = user_data[:, 1:]
             n_train, p = X_train.shape
             n_predict, _ = X_predict.shape
