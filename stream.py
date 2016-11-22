@@ -172,10 +172,10 @@ class ML(object):
             clf.fit(X_train, y_train)
 
             score_list = []
-            y_predict = clf.predict(X_predict[:, 1:])
-            y_score = clf.decision_function(X[:, 1:]) * y_predict
+            y_predict = clf.predict(X_predict)
+            y_score = clf.decision_function(X_predict) * y_predict
             for i in range(len(y_score)):
-                score_list.append((X[i, 0], y_score[i]))
+                score_list.append((user_data[i, 0], y_score[i]))
             score_list = sorted(score_list, key=lambda e: e[1], reversed=True)
             follow_list = [e[0] for e in score_list[:num]]
         else:
