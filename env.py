@@ -12,6 +12,6 @@ key_words += [t['title_short3'] for t in response if t != '']
 TWEET_FILTER_WORDS = [k for k in key_words if len(k)>0]
 
 # days
-PENDING_TIME = 1
+PENDING_TIME = 3
 
 FOLLOW_AT_ONCE = 10
