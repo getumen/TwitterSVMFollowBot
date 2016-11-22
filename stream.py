@@ -129,7 +129,7 @@ class ML(object):
         self.cur.execute('''select following.user_id from following,data
         where following.user_id = data.user_id AND ts<?
         AND following.user_id NOT IN (SELECT user_id FROM followed)''',
-                         (datetime.datetime.now()-datetime.timedelta(days=env.PENDING_TIME),))
+                         ((datetime.datetime.now()-datetime.timedelta(days=env.PENDING_TIME)).isoformat(),))
         remove_list = self.cur.fetchall()
         for remove_id in remove_list:
             self.api.destroy_friendship(id=remove_id[0])
@@ -139,8 +139,7 @@ class ML(object):
             (select following.user_id from following,data
             where following.user_id = data.user_id AND ts<?
             AND following.user_id NOT IN (SELECT user_id FROM followed))''',
-            (datetime.datetime.now() - datetime.timedelta(days=env.PENDING_TIME),)
-        )
+            ((datetime.datetime.now()-datetime.timedelta(days=env.PENDING_TIME)).isoformat(),))
         self.conn.commit()
 
     def follow_back(self):
