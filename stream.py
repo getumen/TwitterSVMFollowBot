@@ -56,7 +56,8 @@ class StreamListener(tweepy.streaming.StreamListener):
         self.cur.execute("REPLACE INTO user VALUES (?,?,?,?,?,?)", self._parse_status(status))
         # self.cur.executemany("INSERT INTO word VALUES (?)", self._parse_text(status.text))
         self.count += 1
-        print(self.count, status.text.rstrip())
+
+        print(self.count, status.author.id ,status.text.rstrip())
         if self.count % 100 == 0:
             self.conn.commit()
         if self.count % env.FOLLOW_PER_TWEET == 0:
@@ -104,21 +105,28 @@ class ML(object):
         self.conn.close()
 
     def follow_user(self, follow_id):
+        follow_id = int(follow_id)
         try:
-            self.api.create_friendship(id=int(follow_id))
+            self.api.create_friendship(user_id=follow_id)
         except tweepy.error.TweepError as e:
-            print(e)
-            code = [0]['code']
-            if int(code) == 162:
-                self.execute('replace into data VALUES (?, 0, ?)', (follow_id, datetime.datetime.now()))
+            with open('error_log.txt','a') as f:
+                f.write('{} user_id={},\n'.format(e.reason, follow_id))
+            if e.api_code == 162:
+                self.cur.execute('replace into data VALUES (?, 0, ?)', (follow_id, datetime.datetime.now()))
+            elif e.api_code == 108:
+                print('delete user')
+                self.cur.execute('delete FROM user where user_id = ?', (follow_id,))
+            else:
+                pass
+
 
     def update_relation(self):
         my_id = self.api.me().id
-        followed_list = self.api.followers_ids(id=my_id)
+        followed_list = self.api.followers_ids(user_id=my_id)
         self.cur.execute('DELETE FROM followed')
         self.conn.commit()
         self.cur.executemany('INSERT INTO followed VALUES (?)', [(e,) for e in followed_list])
-        following_list = self.api.friends_ids(id=my_id)
+        following_list = self.api.friends_ids(user_id=my_id)
         self.cur.execute('DELETE FROM following')
         self.conn.commit()
         self.cur.executemany('INSERT INTO following VALUES (?)', [(e,) for e in following_list])
@@ -135,7 +143,7 @@ class ML(object):
                          (datetime.datetime.now()-datetime.timedelta(days=env.PENDING_TIME),))
         remove_list = self.cur.fetchall()
         for remove_id in remove_list:
-            self.api.destroy_friendship(id=remove_id[0])
+            self.api.destroy_friendship(user_id=remove_id[0])
             time.sleep(1)
         self.cur.execute(
             '''update data set label=0 WHERE user_id IN
@@ -165,14 +173,16 @@ class ML(object):
         Z = np.array(self.cur.fetchall(), dtype=np.float64)
         follow_list = []
         if len(Z.shape) == 2 and np.any(Z[:, 0] == 0) and np.any(Z[:, 0] == 1):
-            y_train = np.nan_to_num(Z[:, 0]).astype(int)
-            X_train = np.nan_to_num(Z[:, 1:])
+            y_train = Z[:, 0].astype(int)
+            X_train = Z[:, 1:]
             self.cur.execute('''select user_id, statuses_count, followers_count, friends_count, protected, favourites_count
                         from user WHERE user_id not in (SELECT user_id FROM followed)
                         and user_id not in (SELECT user_id FROM following)
                         and user_id not in (SELECT user_id FROM data)''')
-            user_data = np.array(self.cur.fetchall(), dtype=np.float64)
-            X_predict = np.nan_to_num(user_data[:, 1:])
+            query_result = self.cur.fetchall()
+            user_ids = [e[0] for e in query_result]
+            user_data = np.array(query_result, dtype=np.float64)
+            X_predict = user_data[:, 1:]
             n_train, p = X_train.shape
             n_predict, _ = X_predict.shape
             X = np.zeros((n_train+n_predict, p))
@@ -189,13 +199,13 @@ class ML(object):
             y_predict = clf.predict(X_predict)
             y_score = np.absolute(clf.decision_function(X_predict))
             y_score[y_predict == 0] = -y_score[y_predict == 0]
-            v= y_score
+            v = y_score
             for i in range(len(y_score)):
-                score_list.append((user_data[i, 0], v[i]))
+                score_list.append((user_ids[i], v[i]))
             score_list = sorted(score_list, key=lambda e: e[1], reverse=True)
             print(score_list[:num])
             follow_list = [e[0] for e in score_list[:num]]
-            delete_list = [e[0] for e in score_list[int(num*1.1):]] if len(score_list) > int(num*1.1) else []
+            delete_list = [e[0] for e in score_list[int(num*5):]] if len(score_list) > int(num*5) else []
             self.cur.execute(
                 'delete from user where user_id in ('
                 +','.join('?'*len(delete_list))
