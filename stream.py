@@ -57,7 +57,7 @@ class StreamListener(tweepy.streaming.StreamListener):
         # self.cur.executemany("INSERT INTO word VALUES (?)", self._parse_text(status.text))
         self.count += 1
 
-        print(self.count, status.author.id ,status.text.rstrip())
+        print(self.count, status.text.replace('\n', '').replace('\r', ''))
         if self.count % 100 == 0:
             self.conn.commit()
         if self.count % env.FOLLOW_PER_TWEET == 0:
@@ -204,6 +204,8 @@ class ML(object):
                 score_list.append((user_ids[i], v[i]))
             score_list = sorted(score_list, key=lambda e: e[1], reverse=True)
             print(score_list[:num])
+            with open('score_log.txt', 'a') as f:
+                f.write(str(score_list[:num])+'\n')
             follow_list = [e[0] for e in score_list[:num]]
             delete_list = [e[0] for e in score_list[int(num*5):]] if len(score_list) > int(num*5) else []
             self.cur.execute(

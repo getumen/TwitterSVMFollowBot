@@ -3,3 +3,4 @@ __pycache__/
 .idea/
 *.db-journal
 error_log.txt
+score_log.txt
