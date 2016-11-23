@@ -192,7 +192,7 @@ class ML(object):
             score_list = sorted(score_list, key=lambda e: e[1], reverse=True)
             print(score_list[:num])
             follow_list = [e[0] for e in score_list[:num]]
-            delete_list = [e[0] for e in score_list[500:]] if len(score_list) > 500 else []
+            delete_list = [e[0] for e in score_list[int(num*1.1):]] if len(score_list) > int(num*1.1) else []
             self.cur.execute(
                 'delete from user where user_id in ('
                 +','.join('?'*len(delete_list))
