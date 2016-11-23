@@ -106,8 +106,11 @@ class ML(object):
     def follow_user(self, follow_id):
         try:
             self.api.create_friendship(id=int(follow_id))
-        except tweepy.error.TweepError:
-            pass
+        except tweepy.error.TweepError as e:
+            print(e)
+            code = [0]['code']
+            if int(code) == 162:
+                self.execute('replace into data VALUES (?, 0, ?)', (follow_id, datetime.datetime.now()))
 
     def update_relation(self):
         my_id = self.api.me().id
