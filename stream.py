@@ -151,7 +151,7 @@ class ML(object):
             self.follow_user(follow_id[0])
             time.sleep(1)
             count += 1
-        self.cur.execute('''insert into data select user_id, 1, ? from followed WHERE user_id NOT IN
+        self.cur.execute('''replace into data select user_id, 1, ? from followed WHERE user_id NOT IN
         (SELECT user_id FROM following)''', (datetime.datetime.now(),))
         self.conn.commit()
         return count
