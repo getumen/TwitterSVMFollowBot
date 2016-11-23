@@ -151,8 +151,8 @@ class ML(object):
             self.follow_user(follow_id[0])
             time.sleep(1)
             count += 1
-        self.cur.execute('''insert into data selct user_id, 1, ? from followed WHERE user_id NOT IN
-        (SELECT user_id FROM following''', (datetime.datetime.now()))
+        self.cur.execute('''insert into data select user_id, 1, ? from followed WHERE user_id NOT IN
+        (SELECT user_id FROM following)''', (datetime.datetime.now(),))
         self.conn.commit()
         return count
 
@@ -192,8 +192,13 @@ class ML(object):
             score_list = sorted(score_list, key=lambda e: e[1], reverse=True)
             print(score_list[:num])
             follow_list = [e[0] for e in score_list[:num]]
-            delete_list = [e[0] for e in score_list[:500]] if len(score_list) > 500 else []
-            self.cur.execute('delete from user where user_id in ('+','.join('?'*len(delete_list))+') and user_id not in (select user_id from data)')
+            delete_list = [e[0] for e in score_list[500:]] if len(score_list) > 500 else []
+            self.cur.execute(
+                'delete from user where user_id in ('
+                +','.join('?'*len(delete_list))
+                +') and user_id not in (select user_id from data)'
+                , delete_list
+            )
         else:
             self.cur.execute(
                 '''select user_id from user
