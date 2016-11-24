@@ -13,5 +13,5 @@ TWEET_FILTER_WORDS = [k for k in key_words if len(k)>0]
 
 # days
 PENDING_TIME = 2
-FOLLOW_PER_TWEET = 3000
+FOLLOW_PER_TWEET = 1000
 FOLLOW_AT_ONCE = 5

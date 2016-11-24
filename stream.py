@@ -53,6 +53,10 @@ class StreamListener(tweepy.streaming.StreamListener):
     def on_status(self, status):
         if status.lang != 'ja':
             return True
+        if 'RT' in status.text:
+            return True
+        if 'http' in status.text:
+            return True
         self.cur.execute("REPLACE INTO user VALUES (?,?,?,?,?,?)", self._parse_status(status))
         # self.cur.executemany("INSERT INTO word VALUES (?)", self._parse_text(status.text))
         self.count += 1
