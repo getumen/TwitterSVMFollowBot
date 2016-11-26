@@ -144,6 +144,7 @@ class ML(object):
         self.cur.execute('DELETE FROM following')
         self.conn.commit()
         self.cur.executemany('INSERT INTO following VALUES (?)', [(e,) for e in following_list])
+        retun len(following_list), len(followed_list)
 
     def update_label(self):
         self.cur.execute(
@@ -240,7 +241,7 @@ class ML(object):
         self.conn.commit()
 
     def run(self):
-        self.update_relation()
+        following_num, followed_num = self.update_relation()
         self.update_label()
         count = self.follow_back()
         me = self.api.me()
@@ -248,7 +249,8 @@ class ML(object):
         followed = me.followers_count
         can_follow = max(5000, int(followed*1.1)) - friend
         follow_num = min(can_follow, env.FOLLOW_AT_ONCE-count if env.FOLLOW_AT_ONCE-count >= 0 else 0)
-        self.follow(follow_num)
+        if following_num < 3*followed_num:
+            self.follow(follow_num)
 
 
 if __name__ == '__main__':
