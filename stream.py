@@ -53,8 +53,6 @@ class StreamListener(tweepy.streaming.StreamListener):
     def on_status(self, status):
         if status.lang != 'ja':
             return True
-        if 'RT' in status.text:
-            return True
         if 'http' in status.text:
             return True
         self.cur.execute("REPLACE INTO user VALUES (?,?,?,?,?,?)", self._parse_status(status))
@@ -93,6 +91,7 @@ class ML(object):
     def __init__(self):
         super(object, self).__init__()
         self.api = tweepy.API(get_oauth())
+        sqlite3.enable_callback_tracebacks(True)
         self.conn = sqlite3.connect('tweet.db')
         self.cur = self.conn.cursor()
         self.cur.execute('''CREATE TABLE IF NOT EXISTS following(user_id INTEGER PRIMARY KEY)''')
@@ -123,6 +122,14 @@ class ML(object):
             else:
                 pass
 
+    def remove_user(self, remove_id):
+        remove_id = int(remove_id)
+        try:
+            self.api.destroy_friendship(user_id=remove_id)
+        except tweepy.error.TweepError as e:
+            with open('error_log.txt','a') as f:
+                f.write('{} user_id={},\n'.format(e.reason, remove_id))
+
 
     def update_relation(self):
         my_id = self.api.me().id
@@ -141,19 +148,19 @@ class ML(object):
             from following where user_id not in (select user_id from data)''', (datetime.datetime.now(),))
         self.cur.execute('update data set label=1 WHERE user_id IN (SELECT user_id FROM followed)')
         self.conn.commit()
-        self.cur.execute('''select following.user_id from following,data
-        where following.user_id = data.user_id AND ts<(select ?)
-        AND following.user_id NOT IN (SELECT user_id FROM followed)''',
-                         (datetime.datetime.now()-datetime.timedelta(days=env.PENDING_TIME),))
+        self.cur.execute('''select user_id from data
+        where label=-1 AND ts<(select ?)
+        AND user_id NOT IN (SELECT user_id FROM followed)''',
+        (datetime.datetime.now()-datetime.timedelta(days=env.PENDING_TIME),))
         remove_list = self.cur.fetchall()
         for remove_id in remove_list:
-            self.api.destroy_friendship(user_id=remove_id[0])
+            self.remove_user(remove_id[0])
             time.sleep(1)
         self.cur.execute(
             '''update data set label=0 WHERE user_id IN
-            (select following.user_id from following,data
-            where following.user_id = data.user_id AND ts<(select ?)
-            AND following.user_id NOT IN (SELECT user_id FROM followed))''',
+            (select user_id from data
+            where label=-1 AND ts<(select ?)
+            AND user_id NOT IN (SELECT user_id FROM followed))''',
             (datetime.datetime.now()-datetime.timedelta(days=env.PENDING_TIME),))
         self.conn.commit()
 
