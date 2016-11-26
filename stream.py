@@ -8,6 +8,7 @@ import datetime
 import numpy as np
 from sklearn import svm
 from scipy import stats
+import random
 
 
 class MyExeption(BaseException): pass
@@ -110,6 +111,7 @@ class ML(object):
     def follow_user(self, follow_id):
         follow_id = int(follow_id)
         try:
+            time.sleep(3*60+random.random()*12*60)
             self.api.create_friendship(user_id=follow_id)
         except tweepy.error.TweepError as e:
             with open('error_log.txt','a') as f:
@@ -125,6 +127,7 @@ class ML(object):
     def remove_user(self, remove_id):
         remove_id = int(remove_id)
         try:
+            time.sleep(3*60+random.random()*12*60)
             self.api.destroy_friendship(user_id=remove_id)
         except tweepy.error.TweepError as e:
             with open('error_log.txt','a') as f:
@@ -155,7 +158,7 @@ class ML(object):
         remove_list = self.cur.fetchall()
         for remove_id in remove_list:
             self.remove_user(remove_id[0])
-            time.sleep(1)
+
         self.cur.execute(
             '''update data set label=0 WHERE user_id IN
             (select user_id from data
@@ -171,7 +174,6 @@ class ML(object):
         count = 0
         for follow_id in follow_list:
             self.follow_user(follow_id[0])
-            time.sleep(1)
             count += 1
         self.cur.execute('''replace into data select user_id, 1, ? from followed WHERE user_id NOT IN
         (SELECT user_id FROM following)''', (datetime.datetime.now(),))
@@ -233,7 +235,6 @@ class ML(object):
             follow_list = [r[0] for r in self.cur.fetchall()]
         for follow_id in follow_list:
             self.follow_user(follow_id)
-            time.sleep(1)
         param = [(uid, -1, datetime.datetime.now()) for uid in follow_list]
         self.cur.executemany('''replace into data VALUES (?,?,?)''', param)
         self.conn.commit()
