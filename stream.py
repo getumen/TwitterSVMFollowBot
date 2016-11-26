@@ -144,7 +144,7 @@ class ML(object):
         self.cur.execute('DELETE FROM following')
         self.conn.commit()
         self.cur.executemany('INSERT INTO following VALUES (?)', [(e,) for e in following_list])
-        retun len(following_list), len(followed_list)
+        return len(following_list), len(followed_list)
 
     def update_label(self):
         self.cur.execute(
