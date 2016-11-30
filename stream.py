@@ -9,6 +9,7 @@ import numpy as np
 from sklearn import svm
 from scipy import stats
 import random
+import requests
 
 
 class MyExeption(BaseException): pass
@@ -249,6 +250,8 @@ class ML(object):
         followed = me.followers_count
         can_follow = max(5000, int(followed*1.1)) - friend
         follow_num = min(can_follow, env.FOLLOW_AT_ONCE-count if env.FOLLOW_AT_ONCE-count >= 0 else 0)
+        with open('error_log.txt','a') as f:
+            f.write('{} {},\n'.format(following_num, followed_num))
         if following_num < 3*followed_num:
             self.follow(follow_num)
 
@@ -264,4 +267,7 @@ if __name__ == '__main__':
             ml = ML()
             ml.run()
             time.sleep(60)
+            stream = tweepy.Stream(auth, StreamListener())
+        except requests.packages.urllib3.exceptions.ProtocolError:
+            auth = get_oauth()
             stream = tweepy.Stream(auth, StreamListener())
