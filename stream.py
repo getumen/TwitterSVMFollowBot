@@ -292,18 +292,20 @@ if __name__ == '__main__':
                 languages=['ja'],
             )
         except MyExeption:
-            lister.free_conn()
-            try:
-                ml = ML()
-                ml.run()
-            except Exception as e:
-                with open('error_log.txt','a') as f:
-                    f.write('ml error = {},\n'.format(e))
-                time.sleep(60*15)
-            finally:
-                ml.free_conn()
+            pass
         except requests.packages.urllib3.exceptions.ProtocolError as e:
             with open('error_log.txt','a') as f:
                 f.write('{},\n'.format(e))
+            continue
+        finally:
             lister.free_conn()
-            time.sleep(60*1)
+
+        try:
+            ml = ML()
+            ml.run()
+        except Exception as e:
+            with open('error_log.txt','a') as f:
+                f.write('ml error = {},\n'.format(e))
+            time.sleep(60*15)
+        finally:
+            ml.free_conn()
