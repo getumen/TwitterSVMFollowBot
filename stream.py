@@ -37,6 +37,10 @@ class StreamListener(tweepy.streaming.StreamListener):
         self.cur.close()
         self.conn.close()
 
+    def free_conn(self):
+        self.cur.close()
+        self.conn.close()
+
     def _parse_status(self, status):
         user = status.author
         followers_count = user.followers_count
@@ -74,6 +78,8 @@ class StreamListener(tweepy.streaming.StreamListener):
 
     def on_limit(self, track):
         """Called when a limitation notice arrives"""
+        with open('error_log.txt','a') as f:
+            f.write('limit\n')
         raise MyExeption
 
     def on_disconnect(self, notice):
@@ -81,6 +87,8 @@ class StreamListener(tweepy.streaming.StreamListener):
         Disconnect codes are listed here:
         https://dev.twitter.com/docs/streaming-apis/messages#Disconnect_messages_disconnect
         """
+        with open('error_log.txt','a') as f:
+            f.write('disconnect\n')
         raise MyExeption
 
 
@@ -251,14 +259,18 @@ class ML(object):
         self.conn.commit()
 
     def run(self):
+        print('update_relation')
         following_num, followed_num = self.update_relation()
+        print('update_label')
         self.update_label()
+        print('follow_back')
         count = self.follow_back()
         me = self.api.me()
         friend = me.friends_count
         followed = me.followers_count
         can_follow = max(5000, int(followed*1.1)) - friend
         follow_num = min(can_follow, env.FOLLOW_AT_ONCE)
+        print('follow')
         if following_num < 3*followed_num:
             self.follow(follow_num)
 
@@ -275,7 +287,7 @@ if __name__ == '__main__':
                 languages=['ja'],
             )
         except MyExeption:
-            time.sleep(3*60)
+            lister.free_conn()
             try:
                 ml = ML()
                 ml.run()
@@ -283,8 +295,6 @@ if __name__ == '__main__':
                 with open('error_log.txt','a') as f:
                     f.write('ml error = {},\n'.format(e))
                 time.sleep(60*15)
-            lister = StreamListener()
-            stream = tweepy.Stream(auth, lister)
         except requests.packages.urllib3.exceptions.ProtocolError as e:
             with open('error_log.txt','a') as f:
                 f.write('{},\n'.format(e))
