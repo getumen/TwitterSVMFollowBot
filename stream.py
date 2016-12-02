@@ -189,15 +189,14 @@ class ML(object):
     def follow_back(self):
         self.cur.execute('''select user_id from followed WHERE user_id NOT IN
         (SELECT user_id FROM following)''')
-        follow_list = self.cur.fetchall()
-        count = 0
+        follow_list = [e[0] for e in self.cur.fetchall()][:10]
         for follow_id in follow_list:
-            self.follow_user(follow_id[0])
-            count += 1
-        self.cur.execute('''replace into data select user_id, 1, ? from followed WHERE user_id NOT IN
-        (SELECT user_id FROM following)''', (datetime.datetime.now(),))
+            self.follow_user(follow_id)
+        self.cur.execute(
+            'replace into data select user_id, 1, ? from followed '
+            + 'WHERE user_id IN ('
+            +','.join('?'*len(follow_list))+')', (datetime.datetime.now(),)+ follow_list)
         self.conn.commit()
-        return count
 
     def follow(self, num):
         self.cur.execute('''select label, statuses_count, followers_count, friends_count, protected, favourites_count
@@ -264,7 +263,7 @@ class ML(object):
         print('update_label')
         self.update_label()
         print('follow_back')
-        count = self.follow_back()
+        self.follow_back()
         me = self.api.me()
         friend = me.friends_count
         followed = me.followers_count
