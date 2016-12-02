@@ -53,10 +53,6 @@ class StreamListener(tweepy.streaming.StreamListener):
         return [(w[0],) for w in words if w[1] and w[1].split(',')[0] == '名詞']
 
     def on_status(self, status):
-        if status.lang != 'ja':
-            return True
-        if 'http' in status.text:
-            return True
         self.cur.execute("REPLACE INTO user VALUES (?,?,?,?,?,?)", self._parse_status(status))
         # self.cur.executemany("INSERT INTO word VALUES (?)", self._parse_text(status.text))
         self.count += 1
@@ -70,11 +66,21 @@ class StreamListener(tweepy.streaming.StreamListener):
 
     def on_error(self, status_code):
         if status_code == 420:
-            time.sleep(60*9)
             raise MyExeption
         return False
 
     def on_timeout(self):
+        raise MyExeption
+
+    def on_limit(self, track):
+        """Called when a limitation notice arrives"""
+        raise MyExeption
+
+    def on_disconnect(self, notice):
+        """Called when twitter sends a disconnect notice
+        Disconnect codes are listed here:
+        https://dev.twitter.com/docs/streaming-apis/messages#Disconnect_messages_disconnect
+        """
         raise MyExeption
 
 
@@ -109,10 +115,14 @@ class ML(object):
         self.cur.close()
         self.conn.close()
 
-    def follow_user(self, follow_id):
+    def free_conn(self):
+        self.cur.close()
+        self.conn.close()
+
+    def follow_user(self, follow_id, wt=5):
         follow_id = int(follow_id)
         try:
-            time.sleep(3*60+random.random()*12*60)
+            time.sleep(60+random.random()*wt*60)
             self.api.create_friendship(user_id=follow_id)
         except tweepy.error.TweepError as e:
             with open('error_log.txt','a') as f:
@@ -120,7 +130,6 @@ class ML(object):
             if e.api_code == 162:
                 self.cur.execute('replace into data VALUES (?, 0, ?)', (follow_id, datetime.datetime.now()))
             elif e.api_code == 108:
-                print('delete user')
                 self.cur.execute('delete FROM user where user_id = ?', (follow_id,))
             else:
                 pass
@@ -128,7 +137,7 @@ class ML(object):
     def remove_user(self, remove_id):
         remove_id = int(remove_id)
         try:
-            time.sleep(3*60+random.random()*12*60)
+            time.sleep(60+random.random()*2*60)
             self.api.destroy_friendship(user_id=remove_id)
         except tweepy.error.TweepError as e:
             with open('error_log.txt','a') as f:
@@ -236,7 +245,7 @@ class ML(object):
                 and user_id not in (SELECT user_id FROM following) ORDER BY RANDOM() limit ?''', (num,))
             follow_list = [r[0] for r in self.cur.fetchall()]
         for follow_id in follow_list:
-            self.follow_user(follow_id)
+            self.follow_user(follow_id, 0)
         param = [(uid, -1, datetime.datetime.now()) for uid in follow_list]
         self.cur.executemany('''replace into data VALUES (?,?,?)''', param)
         self.conn.commit()
@@ -249,25 +258,35 @@ class ML(object):
         friend = me.friends_count
         followed = me.followers_count
         can_follow = max(5000, int(followed*1.1)) - friend
-        follow_num = min(can_follow, env.FOLLOW_AT_ONCE-count if env.FOLLOW_AT_ONCE-count >= 0 else 0)
-        with open('error_log.txt','a') as f:
-            f.write('{} {},\n'.format(following_num, followed_num))
+        follow_num = min(can_follow, env.FOLLOW_AT_ONCE)
         if following_num < 3*followed_num:
             self.follow(follow_num)
 
 
 if __name__ == '__main__':
     auth = get_oauth()
-    stream = tweepy.Stream(auth, StreamListener())
+
     while True:
         try:
-            stream.filter(track=env.TWEET_FILTER_WORDS)
+            lister = StreamListener()
+            stream = tweepy.Stream(auth, lister)
+            stream.filter(
+                track=env.TWEET_FILTER_WORDS,
+                languages=['ja'],
+            )
         except MyExeption:
-            time.sleep(60)
-            ml = ML()
-            ml.run()
-            time.sleep(60)
-            stream = tweepy.Stream(auth, StreamListener())
-        except requests.packages.urllib3.exceptions.ProtocolError:
-            auth = get_oauth()
-            stream = tweepy.Stream(auth, StreamListener())
+            time.sleep(3*60)
+            try:
+                ml = ML()
+                ml.run()
+            except Exception as e:
+                with open('error_log.txt','a') as f:
+                    f.write('ml error = {},\n'.format(e))
+                time.sleep(60*15)
+            lister = StreamListener()
+            stream = tweepy.Stream(auth, lister)
+        except requests.packages.urllib3.exceptions.ProtocolError as e:
+            with open('error_log.txt','a') as f:
+                f.write('{},\n'.format(e))
+            lister.free_conn()
+            time.sleep(60*1)
