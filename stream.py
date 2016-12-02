@@ -15,6 +15,30 @@ import requests
 class MyExeption(BaseException): pass
 
 
+def parse_user_data(user):
+    followers_count = user.followers_count
+    friends_count = user.friends_count
+    protected = user.protected
+    favourites_count = user.favourites_count
+    statuses_count = user.statuses_count
+    user_id = user.id
+    return statuses_count, followers_count, friends_count, protected, favourites_count, user_id
+
+def parse_status(status):
+    user = status.author
+    return parse_user_data(user)
+
+
+def get_oauth():
+    consumer_key = os.environ['TWITTER_CONSUMER_KEY']
+    consumer_secret = os.environ['TWITTER_CONSUMER_SECRET']
+    access_key = os.environ['TWITTER_ACCESS_KEY']
+    access_secret = os.environ['TWITTER_ACCESS_SECRET']
+    _auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    _auth.set_access_token(access_key, access_secret)
+    return _auth
+
+
 class StreamListener(tweepy.streaming.StreamListener):
 
     def __init__(self):
@@ -33,23 +57,9 @@ class StreamListener(tweepy.streaming.StreamListener):
         self.count = 1
         self.conn.commit()
 
-    def __del__(self):
-        self.cur.close()
-        self.conn.close()
-
     def free_conn(self):
         self.cur.close()
         self.conn.close()
-
-    def _parse_status(self, status):
-        user = status.author
-        followers_count = user.followers_count
-        friends_count = user.friends_count
-        protected = user.protected
-        favourites_count = user.favourites_count
-        statuses_count = user.statuses_count
-        user_id = user.id
-        return statuses_count, followers_count, friends_count, protected, favourites_count, user_id
 
     def _parse_text(self, text):
         parsed = self.mecab.parse(text)
@@ -57,7 +67,7 @@ class StreamListener(tweepy.streaming.StreamListener):
         return [(w[0],) for w in words if w[1] and w[1].split(',')[0] == '名詞']
 
     def on_status(self, status):
-        self.cur.execute("REPLACE INTO user VALUES (?,?,?,?,?,?)", self._parse_status(status))
+        self.cur.execute("REPLACE INTO user VALUES (?,?,?,?,?,?)", parse_status(status))
         # self.cur.executemany("INSERT INTO word VALUES (?)", self._parse_text(status.text))
         self.count += 1
 
@@ -92,16 +102,6 @@ class StreamListener(tweepy.streaming.StreamListener):
         raise MyExeption
 
 
-def get_oauth():
-    consumer_key = os.environ['TWITTER_CONSUMER_KEY']
-    consumer_secret = os.environ['TWITTER_CONSUMER_SECRET']
-    access_key = os.environ['TWITTER_ACCESS_KEY']
-    access_secret = os.environ['TWITTER_ACCESS_SECRET']
-    _auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-    _auth.set_access_token(access_key, access_secret)
-    return _auth
-
-
 class ML(object):
 
     def __init__(self):
@@ -118,10 +118,6 @@ class ML(object):
         ts datetime
         )''')
         self.conn.commit()
-
-    def __del__(self):
-        self.cur.close()
-        self.conn.close()
 
     def free_conn(self):
         self.cur.close()
@@ -174,28 +170,31 @@ class ML(object):
         where label=-1 AND ts<(select ?)
         AND user_id NOT IN (SELECT user_id FROM followed)''',
         (datetime.datetime.now()-datetime.timedelta(days=env.PENDING_TIME),))
-        remove_list = self.cur.fetchall()
+        remove_list = [e[0] for e in self.cur.fetchall()][:env.REMOVE_AT_ONCE]
         for remove_id in remove_list:
-            self.remove_user(remove_id[0])
+            self.remove_user(remove_id)
 
         self.cur.execute(
             '''update data set label=0 WHERE user_id IN
             (select user_id from data
             where label=-1 AND ts<(select ?)
-            AND user_id NOT IN (SELECT user_id FROM followed))''',
-            (datetime.datetime.now()-datetime.timedelta(days=env.PENDING_TIME),))
+            AND user_id IN ('''
+            +','.join('?'*len(remove_list))
+            +'''))''',
+            [datetime.datetime.now()-datetime.timedelta(days=env.PENDING_TIME),]+remove_list)
         self.conn.commit()
+
 
     def follow_back(self):
         self.cur.execute('''select user_id from followed WHERE user_id NOT IN
         (SELECT user_id FROM following)''')
-        follow_list = [e[0] for e in self.cur.fetchall()][:10]
+        follow_list = [e[0] for e in self.cur.fetchall()][:env.FOLLOW_BACK_AT_ONECE]
         for follow_id in follow_list:
             self.follow_user(follow_id)
         self.cur.execute(
             'replace into data select user_id, 1, ? from followed '
             + 'WHERE user_id IN ('
-            +','.join('?'*len(follow_list))+')', (datetime.datetime.now(),)+ follow_list)
+            +','.join('?'*len(follow_list))+')', [datetime.datetime.now()]+ follow_list)
         self.conn.commit()
 
     def follow(self, num):
@@ -257,9 +256,16 @@ class ML(object):
         self.cur.executemany('''replace into data VALUES (?,?,?)''', param)
         self.conn.commit()
 
+    def update_user(self):
+        user_list = self.api.followers(self.api.me().id)
+        user_data_list = [parse_user_data(u) for u in user_list]
+        self.cur.executemany("REPLACE INTO user VALUES (?,?,?,?,?,?)", user_data_list)
+
     def run(self):
         print('update_relation')
         following_num, followed_num = self.update_relation()
+        print('update_user')
+        self.update_user()
         print('update_label')
         self.update_label()
         print('follow_back')
@@ -294,6 +300,8 @@ if __name__ == '__main__':
                 with open('error_log.txt','a') as f:
                     f.write('ml error = {},\n'.format(e))
                 time.sleep(60*15)
+            finally:
+                ml.free_conn()
         except requests.packages.urllib3.exceptions.ProtocolError as e:
             with open('error_log.txt','a') as f:
                 f.write('{},\n'.format(e))
