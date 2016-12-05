@@ -15,6 +15,9 @@ import requests
 class MyExeption(BaseException): pass
 
 
+class LimitException(BaseException): pass
+
+
 def parse_user_data(user):
     followers_count = user.followers_count
     friends_count = user.friends_count
@@ -56,6 +59,7 @@ class StreamListener(tweepy.streaming.StreamListener):
         self.mecab = MeCab.Tagger()
         self.count = 1
         self.conn.commit()
+        self.status_list = []
 
     def free_conn(self):
         self.cur.close()
@@ -67,7 +71,7 @@ class StreamListener(tweepy.streaming.StreamListener):
         return [(w[0],) for w in words if w[1] and w[1].split(',')[0] == '名詞']
 
     def on_status(self, status):
-        self.cur.execute("REPLACE INTO user VALUES (?,?,?,?,?,?)", parse_status(status))
+        self.status_list.append(status)
         # self.cur.executemany("INSERT INTO word VALUES (?)", self._parse_text(status.text))
         self.count += 1
 
@@ -90,7 +94,7 @@ class StreamListener(tweepy.streaming.StreamListener):
         """Called when a limitation notice arrives"""
         with open('error_log.txt','a') as f:
             f.write('limit\n')
-        raise MyExeption
+        raise LimitException
 
     def on_disconnect(self, notice):
         """Called when twitter sends a disconnect notice
@@ -104,7 +108,7 @@ class StreamListener(tweepy.streaming.StreamListener):
 
 class ML(object):
 
-    def __init__(self):
+    def __init__(self, status_list):
         super(object, self).__init__()
         self.api = tweepy.API(get_oauth())
         sqlite3.enable_callback_tracebacks(True)
@@ -117,6 +121,10 @@ class ML(object):
         label INTEGER,
         ts datetime
         )''')
+        self.cur.executemany(
+            "REPLACE INTO user VALUES (?,?,?,?,?,?)",
+            [parse_status(status) for status in status_list]
+        )
         self.conn.commit()
 
     def free_conn(self):
@@ -284,6 +292,7 @@ if __name__ == '__main__':
     auth = get_oauth()
 
     while True:
+        status_list = []
         try:
             lister = StreamListener()
             stream = tweepy.Stream(auth, lister)
@@ -292,16 +301,23 @@ if __name__ == '__main__':
                 languages=['ja'],
             )
         except MyExeption:
-            pass
+            status_list = lister.status_list
         except requests.packages.urllib3.exceptions.ProtocolError as e:
             with open('error_log.txt','a') as f:
                 f.write('{},\n'.format(e))
+            continue
+        except AttributeError as e:
+            with open('error_log.txt','a') as f:
+                f.write('{},\n'.format(e))
+            continue
+        except LimitException as e:
+            time.sleep(60*15)
             continue
         finally:
             lister.free_conn()
 
         try:
-            ml = ML()
+            ml = ML(status_list)
             ml.run()
         except Exception as e:
             with open('error_log.txt','a') as f:
