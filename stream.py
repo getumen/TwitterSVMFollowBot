@@ -193,12 +193,12 @@ class ML(object):
         self.conn.commit()
 
 
-    def follow_back(self):
+    def follow_back(self, wt=5):
         self.cur.execute('''select user_id from followed WHERE user_id NOT IN
         (SELECT user_id FROM following)''')
         follow_list = [e[0] for e in self.cur.fetchall()][:env.FOLLOW_BACK_AT_ONECE]
         for follow_id in follow_list:
-            self.follow_user(follow_id)
+            self.follow_user(follow_id, wt)
         self.cur.execute(
             'replace into data select user_id, 1, ? from followed '
             + 'WHERE user_id IN ('
@@ -223,9 +223,18 @@ class ML(object):
             X_predict = user_data[:, 1:]
             n_train, p = X_train.shape
             n_predict, _ = X_predict.shape
-            X = np.zeros((n_train+n_predict, p))
-            X[:n_train, :] = X_train
-            X[n_train:, :] = X_predict
+            X = np.zeros((n_train+n_predict, p+6))
+
+            X[:n_train, :p] = X_train
+            X[n_train:, :p] = X_predict
+
+            X[:,p] = X[:,1]/(X[:,2]+1)
+            X[:,p+1] = X[:,1]-X[:,2]
+            X[:,p+2] = X[:,1]/(X[:,3]+1)
+            X[:,p+3] = X[:,1]-X[:,3]
+            X[:,p+4] = X[:,2]/(X[:,3]+1)
+            X[:,p+5] = X[:,2]-X[:,3]
+
             X = np.nan_to_num(stats.zscore(X.copy(), axis=0))
             X_train = X[:n_train, :]
             X_predict = X[n_train:, :]
@@ -277,7 +286,10 @@ class ML(object):
         print('update_label')
         self.update_label()
         print('follow_back')
-        self.follow_back()
+        if following_num < followed_num:
+            self.follow_back(-1)
+        else:
+            self.follow_back()
         me = self.api.me()
         friend = me.friends_count
         followed = me.followers_count
