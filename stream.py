@@ -158,11 +158,24 @@ class ML(object):
 
     def update_relation(self):
         my_id = self.api.me().id
-        followed_list = self.api.followers_ids(user_id=my_id)
+        followed_list = []
+        following_list = []
+        me = self.api.me()
+        followed_list = self.api.followers_ids(me.id)
+        following_list = self.api.friends_ids(me.id)
+        if me.followers_count != len(followed_list) or me.friends_count != len(following_list):
+            for followers in tweepy.Cursor(self.api.followers).pages():
+                followed_list += [follower.id for follower in followeds]
+                followed_list = list(set(followed_list))
+                time.sleep(60)
+            for followings in tweepy.Cursor(self.api.friends).pages():
+                following_list += [following.id for following in followings]
+                following_list = list(set(following_list))
+                time.sleep(60)
         self.cur.execute('DELETE FROM followed')
         self.conn.commit()
         self.cur.executemany('INSERT INTO followed VALUES (?)', [(e,) for e in followed_list])
-        following_list = self.api.friends_ids(user_id=my_id)
+
         self.cur.execute('DELETE FROM following')
         self.conn.commit()
         self.cur.executemany('INSERT INTO following VALUES (?)', [(e,) for e in following_list])
@@ -323,7 +336,7 @@ if __name__ == '__main__':
                 f.write('{},\n'.format(e))
             continue
         except LimitException as e:
-            time.sleep(60*15)
+            time.sleep(60*60)
             continue
         finally:
             lister.free_conn()
@@ -331,6 +344,14 @@ if __name__ == '__main__':
         try:
             ml = ML(status_list)
             ml.run()
+        except tweepy.error.TweepError as e:
+            if e.api_code == 88:
+                time.sleep(60*60)
+            else:
+                time.sleep(60*15)
+            with open('error_log.txt','a') as f:
+                f.write('ml error = {},\n'.format(e))
+
         except Exception as e:
             with open('error_log.txt','a') as f:
                 f.write('ml error = {},\n'.format(e))
