@@ -165,7 +165,7 @@ class ML(object):
         following_list = self.api.friends_ids(me.id)
         if me.followers_count != len(followed_list) or me.friends_count != len(following_list):
             for followers in tweepy.Cursor(self.api.followers).pages():
-                followed_list += [follower.id for follower in followeds]
+                followed_list += [follower.id for follower in followers]
                 followed_list = list(set(followed_list))
                 time.sleep(60)
             for followings in tweepy.Cursor(self.api.friends).pages():
@@ -267,7 +267,7 @@ class ML(object):
             with open('score_log.txt', 'a') as f:
                 f.write(str(score_list[:num])+'\n')
             follow_list = [e[0] for e in score_list[:num]]
-            delete_list = [e[0] for e in score_list[int(num*5):]] if len(score_list) > int(num*5) else []
+            delete_list = [e[0] for e in score_list[int(num*100):]] if len(score_list) > int(num*100) else []
             self.cur.execute(
                 'delete from user where user_id in ('
                 +','.join('?'*len(delete_list))
