@@ -267,7 +267,7 @@ class ML(object):
             with open('score_log.txt', 'a') as f:
                 f.write(str(score_list[:num])+'\n')
             follow_list = [e[0] for e in score_list[:num]]
-            delete_list = [e[0] for e in score_list[int(num*100):]] if len(score_list) > int(num*100) else []
+            delete_list = [e[0] for e in score_list[int(num*1000):]] if len(score_list) > int(num*1000) else []
             self.cur.execute(
                 'delete from user where user_id in ('
                 +','.join('?'*len(delete_list))
@@ -328,13 +328,17 @@ if __name__ == '__main__':
         except MyExeption:
             status_list = lister.status_list
         except requests.packages.urllib3.exceptions.ProtocolError as e:
+            status_list += lister.status_list
             with open('error_log.txt','a') as f:
-                f.write('{},\n'.format(e))
-            continue
+                f.write('{}, status_list={}\n'.format(e, len(status_list)))
+            if len(status_list) > env.FOLLOW_PER_TWEET:
+                pass
+            else:
+                time.sleep(60)
+                continue
         except AttributeError as e:
             with open('error_log.txt','a') as f:
                 f.write('{},\n'.format(e))
-            continue
         except LimitException as e:
             time.sleep(60*60)
             continue
