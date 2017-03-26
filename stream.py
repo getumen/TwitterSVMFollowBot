@@ -336,6 +336,8 @@ if __name__ == '__main__':
                 track=env.TWEET_FILTER_WORDS,
                 languages=['ja'],
             )
+        except MyExeption as e:
+            pass
         except requests.packages.urllib3.exceptions.ProtocolError as e:
             status_list += lister.status_list
             with open('error_log.txt','a') as f:
