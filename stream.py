@@ -137,10 +137,10 @@ class ML(object):
         self.cur.close()
         self.conn.close()
 
-    def follow_user(self, follow_id, wt=5):
+    def follow_user(self, follow_id, wt=1):
         follow_id = int(follow_id)
         try:
-            time.sleep(60+random.random()*wt*60)
+            time.sleep(random.random()*wt*60)
             self.api.create_friendship(user_id=follow_id)
         except tweepy.error.TweepError as e:
             with open('error_log.txt','a') as f:
@@ -155,7 +155,7 @@ class ML(object):
     def remove_user(self, remove_id):
         remove_id = int(remove_id)
         try:
-            time.sleep(60+random.random()*2*60)
+            time.sleep(random.random()*2*60)
             self.api.destroy_friendship(user_id=remove_id)
         except tweepy.error.TweepError as e:
             with open('error_log.txt','a') as f:
@@ -217,7 +217,7 @@ class ML(object):
         self.conn.commit()
 
 
-    def follow_back(self, wt=5):
+    def follow_back(self, wt=1):
         self.cur.execute('''select user_id from followed WHERE user_id NOT IN
         (SELECT user_id FROM following)''')
         follow_list = [e[0] for e in self.cur.fetchall()][:env.FOLLOW_BACK_AT_ONECE]
@@ -292,7 +292,7 @@ class ML(object):
                 and user_id not in (SELECT user_id FROM following) ORDER BY RANDOM() limit ?''', (num,))
             follow_list = [r[0] for r in self.cur.fetchall()]
         for follow_id in follow_list:
-            self.follow_user(follow_id, 0)
+            self.follow_user(follow_id)
         param = [(uid, -1, datetime.datetime.now()) for uid in follow_list]
         self.cur.executemany('''replace into data VALUES (?,?,?)''', param)
         self.conn.commit()
@@ -310,10 +310,7 @@ class ML(object):
         print('update_label')
         self.update_label()
         print('follow_back')
-        if following_num < followed_num:
-            self.follow_back(-1)
-        else:
-            self.follow_back()
+        self.follow_back()
         me = self.api.me()
         friend = me.friends_count
         followed = me.followers_count
@@ -339,15 +336,12 @@ if __name__ == '__main__':
         except MyExeption as e:
             pass
         except requests.packages.urllib3.exceptions.ProtocolError as e:
-            status_list += lister.status_list
             with open('error_log.txt','a') as f:
                 f.write('{}, status_list={}\n'.format(e, len(status_list)))
         except AttributeError as e:
-            status_list += lister.status_list
             with open('error_log.txt','a') as f:
                 f.write('{},\n'.format(e))
         except WarningException as e:
-            status_list += lister.status_list
             print('Warning arrives')
             time.sleep(60*60)
         finally:
