@@ -76,9 +76,9 @@ class StreamListener(tweepy.streaming.StreamListener):
         self.count += 1
 
         print(self.count, status.text.replace('\n', '').replace('\r', ''))
-        if self.count % 100 == 0:
-            self.conn.commit()
-        if self.count % env.FOLLOW_PER_TWEET == 0:
+        #if self.count % 100 == 0:
+        #    self.conn.commit()
+        if self.count > env.FOLLOW_PER_TWEET:
             raise MyExeption
         return True
 
