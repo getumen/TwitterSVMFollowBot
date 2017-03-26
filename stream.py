@@ -57,7 +57,7 @@ class StreamListener(tweepy.streaming.StreamListener):
              user_id integer PRIMARY KEY )''')
         self.cur.execute('CREATE TABLE IF NOT EXISTS word (word text)')
         self.mecab = MeCab.Tagger()
-        self.count = 1
+        self.count = len(status_list)
         self.conn.commit()
         self.status_list = status_list
 
@@ -345,7 +345,6 @@ if __name__ == '__main__':
             print('Warning arrives')
             time.sleep(60*60)
         finally:
-            status_list += lister.status_list
             lister.free_conn()
 
         if len(status_list) <= env.FOLLOW_PER_TWEET:
