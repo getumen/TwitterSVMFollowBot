@@ -15,7 +15,7 @@ import requests
 class MyExeption(BaseException): pass
 
 
-class LimitException(BaseException): pass
+class WarningException(BaseException): pass
 
 
 def parse_user_data(user):
@@ -93,8 +93,14 @@ class StreamListener(tweepy.streaming.StreamListener):
     def on_limit(self, track):
         """Called when a limitation notice arrives"""
         with open('error_log.txt','a') as f:
-            f.write('limit\n')
-        raise LimitException
+            f.write('bursting {}\n'.format(track))
+
+    def on_warning(self, notice):
+        print(notice)
+        with open('error_log.txt','a') as f:
+            f.write('{}\n'.format(notice))
+        raise WarningException
+
 
     def on_disconnect(self, notice):
         """Called when twitter sends a disconnect notice
@@ -163,12 +169,17 @@ class ML(object):
         me = self.api.me()
         followed_list = self.api.followers_ids(me.id)
         following_list = self.api.friends_ids(me.id)
-        if me.followers_count != len(followed_list) or me.friends_count != len(following_list):
+        if me.followers_count != len(followed_list):
+            print(me.followers_count, len(followed_list))
             for followers in tweepy.Cursor(self.api.followers).pages():
+                print(followers)
                 followed_list += [follower.id for follower in followers]
                 followed_list = list(set(followed_list))
                 time.sleep(60)
+        if me.friends_count != len(following_list):
+            print(me.friends_count, len(following_list))
             for followings in tweepy.Cursor(self.api.friends).pages():
+                print(followings)
                 following_list += [following.id for following in followings]
                 following_list = list(set(following_list))
                 time.sleep(60)
@@ -339,7 +350,8 @@ if __name__ == '__main__':
         except AttributeError as e:
             with open('error_log.txt','a') as f:
                 f.write('{},\n'.format(e))
-        except LimitException as e:
+        except WarningException as e:
+            print('Limit Exception')
             time.sleep(60*60)
             continue
         finally:
