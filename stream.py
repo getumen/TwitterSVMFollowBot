@@ -44,7 +44,7 @@ def get_oauth():
 
 class StreamListener(tweepy.streaming.StreamListener):
 
-    def __init__(self):
+    def __init__(self, status_list):
         super(StreamListener,self).__init__()
         self.conn = sqlite3.connect('tweet.db')
         self.cur = self.conn.cursor()
@@ -59,7 +59,7 @@ class StreamListener(tweepy.streaming.StreamListener):
         self.mecab = MeCab.Tagger()
         self.count = 1
         self.conn.commit()
-        self.status_list = []
+        self.status_list = status_list
 
     def free_conn(self):
         self.cur.close()
@@ -326,40 +326,39 @@ class ML(object):
 
 if __name__ == '__main__':
     auth = get_oauth()
+    status_list = []
 
     while True:
-        status_list = []
         try:
-            lister = StreamListener()
+            lister = StreamListener(status_list)
             stream = tweepy.Stream(auth, lister)
             stream.filter(
                 track=env.TWEET_FILTER_WORDS,
                 languages=['ja'],
             )
-        except MyExeption:
-            status_list = lister.status_list
         except requests.packages.urllib3.exceptions.ProtocolError as e:
             status_list += lister.status_list
             with open('error_log.txt','a') as f:
                 f.write('{}, status_list={}\n'.format(e, len(status_list)))
-            if len(status_list) > env.FOLLOW_PER_TWEET:
-                pass
-            else:
-                time.sleep(60)
-                continue
         except AttributeError as e:
+            status_list += lister.status_list
             with open('error_log.txt','a') as f:
                 f.write('{},\n'.format(e))
         except WarningException as e:
-            print('Limit Exception')
+            status_list += lister.status_list
+            print('Warning arrives')
             time.sleep(60*60)
-            continue
         finally:
+            status_list += lister.status_list
             lister.free_conn()
+
+        if len(status_list) <= env.FOLLOW_PER_TWEET:
+            continue
 
         try:
             ml = ML(status_list)
             ml.run()
+            status_list.clear()
         except tweepy.error.TweepError as e:
             if e.api_code == 88:
                 time.sleep(60*60)
